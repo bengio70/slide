@@ -769,6 +769,116 @@
                 </div>
             </div>
 
+            <!-- Slide 4: Context Rotting -->
+            <div class="slide" data-section="OPENCODE"><span class="section-tag">OpenCode</span>
+                <div class="s-section">AI Best Practices</div>
+                <h2 class="s-title" style="font-size:38px">Context Rotting: when the AI forgets</h2>
+                <div class="split" style="flex:1;align-items:center;margin-top:16px">
+                    <div class="half" style="display:flex;flex-direction:column;gap:12px;justify-content:center">
+                        <div class="card card-blue" style="padding:14px 16px">
+                            <div class="card-title" style="font-size:14px"><i class="fa-solid fa-border-all" style="color:var(--blue);margin-right:6px"></i>Limited Context Window</div>
+                            <div class="card-body" style="margin-top:4px;font-size:12px">AI agents can only "see" a portion of your project at once. As conversations grow, older context gets pushed out.</div>
+                        </div>
+                        <div class="card card-amber" style="padding:14px 16px">
+                            <div class="card-title" style="font-size:14px"><i class="fa-solid fa-triangle-exclamation" style="color:var(--amber);margin-right:6px"></i>The Rot Effect</div>
+                            <div class="card-body" style="margin-top:4px;font-size:12px">After many exchanges, the AI forgets earlier files and decisions. It may re-read, make inconsistent changes, or lose track of the architecture.</div>
+                        </div>
+                        <div class="card card-green" style="padding:14px 16px">
+                            <div class="card-title" style="font-size:14px"><i class="fa-solid fa-lightbulb" style="color:var(--green);margin-right:6px"></i>Prevention</div>
+                            <div class="card-body" style="margin-top:4px;font-size:12px">Keep prompts focused. Start fresh sessions for different features. Re-read key files when needed. Use clear, self-contained requests.</div>
+                        </div>
+                    </div>
+                    <div class="half diagram"><svg viewBox="0 0 460 340">
+                            <!-- Header -->
+                            <text x="230" y="22" fill="var(--text)" font-size="12" font-family="Source Sans 3" font-weight="700" text-anchor="middle">Context Window Over Time</text>
+
+                            <!-- Timeline line -->
+                            <line x1="45" y1="50" x2="415" y2="50" stroke="var(--blue30)" stroke-width="2" />
+
+                            <!-- Dot 1 -->
+                            <circle cx="90" cy="50" r="8" fill="var(--green)" />
+
+                            <!-- Stage 1 Files -->
+                            <rect x="54" y="78" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--green30)" stroke-width="1.5" />
+                            <text x="90" y="91" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">App.tsx</text>
+                            <text x="132" y="91" fill="var(--green)" font-size="10" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">✓</text>
+
+                            <rect x="54" y="110" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--green30)" stroke-width="1.5" />
+                            <text x="90" y="123" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">utils.ts</text>
+                            <text x="132" y="123" fill="var(--green)" font-size="10" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">✓</text>
+
+                            <rect x="54" y="142" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--green30)" stroke-width="1.5" />
+                            <text x="90" y="155" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">styles.css</text>
+                            <text x="132" y="155" fill="var(--green)" font-size="10" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">✓</text>
+
+                            <text x="90" y="188" fill="var(--green)" font-size="9" font-family="Source Sans 3" font-weight="700" text-anchor="middle">Fresh</text>
+                            <text x="90" y="200" fill="var(--text2)" font-size="7" font-family="Source Sans 3" text-anchor="middle">All files visible</text>
+
+                            <!-- Arrow 1→2 -->
+                            <line x1="130" y1="50" x2="190" y2="50" stroke="var(--amber)" stroke-width="2" marker-end="url(#arrowAmber)" />
+
+                            <!-- Dot 2 -->
+                            <circle cx="230" cy="50" r="8" fill="var(--amber)" />
+
+                            <!-- Stage 2 Files -->
+                            <g opacity="0.3">
+                                <rect x="194" y="78" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--amber30)" stroke-width="1" />
+                                <text x="230" y="91" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">App.tsx</text>
+                            </g>
+
+                            <rect x="194" y="110" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--green30)" stroke-width="1.5" />
+                            <text x="230" y="123" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">utils.ts</text>
+                            <text x="272" y="123" fill="var(--green)" font-size="10" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">✓</text>
+
+                            <g opacity="0.3">
+                                <rect x="194" y="142" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--amber30)" stroke-width="1" />
+                                <text x="230" y="155" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">styles.css</text>
+                            </g>
+
+                            <text x="230" y="188" fill="var(--amber)" font-size="9" font-family="Source Sans 3" font-weight="700" text-anchor="middle">Fading</text>
+                            <text x="230" y="200" fill="var(--text2)" font-size="7" font-family="Source Sans 3" text-anchor="middle">Partial context</text>
+
+                            <!-- Arrow 2→3 -->
+                            <line x1="270" y1="50" x2="330" y2="50" stroke="var(--red)" stroke-width="2" marker-end="url(#arrowRed)" />
+
+                            <!-- Dot 3 -->
+                            <circle cx="370" cy="50" r="8" fill="var(--red)" />
+
+                            <!-- Stage 3 Files -->
+                            <g opacity="0.2">
+                                <rect x="334" y="78" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--red30)" stroke-width="1" />
+                                <text x="370" y="91" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">App.tsx</text>
+                                <text x="412" y="91" fill="var(--red)" font-size="10" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">✗</text>
+                            </g>
+
+                            <g opacity="0.2">
+                                <rect x="334" y="110" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--red30)" stroke-width="1" />
+                                <text x="370" y="123" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">utils.ts</text>
+                                <text x="412" y="123" fill="var(--red)" font-size="10" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">✗</text>
+                            </g>
+
+                            <rect x="334" y="142" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--green30)" stroke-width="1.5" />
+                            <text x="370" y="155" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">styles.css</text>
+                            <text x="412" y="155" fill="var(--green)" font-size="10" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">✓</text>
+
+                            <text x="370" y="188" fill="var(--red)" font-size="9" font-family="Source Sans 3" font-weight="700" text-anchor="middle">Rot</text>
+                            <text x="370" y="200" fill="var(--text2)" font-size="7" font-family="Source Sans 3" text-anchor="middle">Forgotten context</text>
+
+                            <!-- Arrow to info -->
+                            <line x1="230" y1="216" x2="230" y2="232" stroke="var(--blue30)" stroke-width="1" marker-end="url(#arrowBlue)" />
+
+                            <!-- Bottom info bar -->
+                            <rect x="20" y="235" width="420" height="55" rx="6" fill="var(--bg2)" stroke="var(--blue15)" stroke-width="1" />
+                            <text x="230" y="254" fill="var(--text2)" font-size="8" font-family="Source Sans 3" font-weight="600" text-anchor="middle">The AI's context window is limited — older information "rots out"</text>
+                            <text x="230" y="268" fill="var(--text3)" font-size="7" font-family="Source Sans 3" text-anchor="middle">Keep sessions focused · Re-read key files · Start fresh for new features</text>
+
+                            <!-- Bottom badge -->
+                            <rect x="2" y="320" width="456" height="18" rx="4" fill="rgba(10,132,255,0.06)" stroke="var(--blue15)" stroke-width="0.5" />
+                            <text x="230" y="329" fill="var(--text2)" font-size="7" font-family="Source Sans 3" font-weight="600" text-anchor="middle" dominant-baseline="central">Use the terminal to re-establish context when the AI seems to "forget"</text>
+                        </svg></div>
+                </div>
+            </div>
+
         </div><!-- end deck-wrapper -->
 
         <div id="progress"></div>
