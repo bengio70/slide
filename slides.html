@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git & OpenCode — Stage Cubbit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #060910;
+            --bg2: #0c1018;
+            --bg3: #141c2a;
+            --text: #ffffff;
+            --text2: #e0e4ea;
+            --text3: #9099A1;
+            --blue: #0a84ff;
+            --blue30: rgba(10, 132, 255, 0.3);
+            --blue15: rgba(10, 132, 255, 0.15);
+            --blue08: rgba(10, 132, 255, 0.08);
+            --cyan: #00d4ff;
+            --green: #22C55E;
+            --green30: rgba(34, 197, 94, 0.3);
+            --amber: #F59E0B;
+            --amber30: rgba(245, 158, 11, 0.3);
+            --red: #EF4444;
+            --red30: rgba(239, 68, 68, 0.3);
+            --radius: 12px
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            background: #060910;
+            font-family: 'Source Sans 3', sans-serif;
+            color: var(--text)
+        }
+
+        #app {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative
+        }
+
+        #deck-wrapper {
+            position: relative;
+            width: 1280px;
+            height: 720px;
+            transform-origin: center center
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            background: var(--bg);
+            border-radius: 4px;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            padding: 60px 72px
+        }
+
+        .slide.active {
+            display: flex
+        }
+
+        .glow-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 400px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(ellipse, rgba(10, 132, 255, 0.12) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0
+        }
+
+        .s-title {
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            color: var(--text);
+            position: relative;
+            z-index: 1
+        }
+
+        .s-subtitle {
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--text2);
+            margin-top: 12px;
+            position: relative;
+            z-index: 1
+        }
+
+        .s-section {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--blue);
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1
+        }
+
+        .s-body {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--text2);
+            line-height: 1.6;
+            position: relative;
+            z-index: 1
+        }
+
+        .s-body strong {
+            color: var(--text);
+            font-weight: 600
+        }
+
+        .centered {
+            justify-content: center;
+            align-items: center;
+            text-align: center
+        }
+
+        .split {
+            display: flex;
+            flex-direction: row;
+            gap: 48px
+        }
+
+        .split>.half {
+            flex: 1;
+            min-width: 0
+        }
+
+        .cols-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+            position: relative;
+            z-index: 1
+        }
+
+        .cols-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            position: relative;
+            z-index: 1
+        }
+
+        .grid-2x2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+            position: relative;
+            z-index: 1
+        }
+
+        .card {
+            background: var(--bg2);
+            border: 1px solid rgba(10, 132, 255, 0.15);
+            border-radius: var(--radius);
+            padding: 24px;
+            position: relative
+        }
+
+        .card-blue {
+            border-color: var(--blue30);
+            box-shadow: 0 0 20px rgba(10, 132, 255, 0.05)
+        }
+
+        .card-red {
+            border-color: var(--red30)
+        }
+
+        .card-green {
+            border-color: var(--green30)
+        }
+
+        .card-amber {
+            border-color: var(--amber30)
+        }
+
+        .card-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--blue);
+            margin-bottom: 8px
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px
+        }
+
+        .card-body {
+            font-size: 14px;
+            color: var(--text2);
+            line-height: 1.5
+        }
+
+        .diagram {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .diagram svg {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%
+        }
+
+        .node {
+            fill: var(--bg2);
+            stroke: var(--blue30);
+            stroke-width: 1.5
+        }
+
+        .node-text {
+            fill: var(--text);
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            text-anchor: middle;
+            dominant-baseline: central
+        }
+
+        .node-text-sm {
+            fill: var(--text2);
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 9px;
+            font-weight: 400;
+            text-anchor: middle;
+            dominant-baseline: central
+        }
+
+        .arrow-line {
+            stroke: var(--blue30);
+            stroke-width: 1.5;
+            fill: none;
+            marker-end: url(#arrowBlue)
+        }
+
+        .arrow-line-green {
+            stroke: var(--green30);
+            stroke-width: 1.5;
+            fill: none;
+            marker-end: url(#arrowGreen)
+        }
+
+        .arrow-line-red {
+            stroke: var(--red30);
+            stroke-width: 1.5;
+            fill: none;
+            marker-end: url(#arrowRed)
+        }
+
+        .icon-check {
+            color: var(--green);
+            font-size: 24px
+        }
+
+        .icon-x {
+            color: var(--red);
+            font-size: 24px
+        }
+
+        .code-block {
+            background: #0D1117;
+            border: 1px solid rgba(10, 132, 255, 0.15);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            white-space: pre-wrap
+        }
+
+        .code-block .key {
+            color: var(--blue)
+        }
+
+        .code-block .str {
+            color: var(--green)
+        }
+
+        .code-block .num {
+            color: var(--amber)
+        }
+
+        .code-block .bracket {
+            color: var(--text2)
+        }
+
+        #progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--blue);
+            transition: width 0.3s ease;
+            z-index: 100;
+            border-radius: 0 0 2px 2px
+        }
+
+        #controls {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 100;
+            background: rgba(11, 15, 20, 0.92);
+            backdrop-filter: blur(12px);
+            padding: 8px 18px;
+            border-radius: 40px;
+            border: 1px solid rgba(10, 132, 255, 0.12)
+        }
+
+        #controls button {
+            background: none;
+            border: none;
+            color: var(--text2);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: all 0.2s
+        }
+
+        #controls button:hover {
+            color: var(--text);
+            background: rgba(10, 132, 255, 0.1)
+        }
+
+        #slide-counter {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text2);
+            min-width: 60px;
+            text-align: center
+        }
+
+        #section-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--blue);
+            padding: 4px 12px;
+            background: rgba(10, 132, 255, 0.08);
+            border-radius: 20px;
+            white-space: nowrap
+        }
+
+        #download-btn {
+            color: var(--blue) !important;
+            font-size: 13px !important;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px !important;
+            border: 1px solid rgba(10, 132, 255, 0.2) !important;
+            border-radius: 20px !important
+        }
+
+        #download-btn:hover {
+            background: rgba(10, 132, 255, 0.12) !important
+        }
+
+        #fullscreen-btn {
+            color: var(--blue) !important;
+            font-size: 13px !important;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px !important;
+            border: 1px solid rgba(10, 132, 255, 0.2) !important;
+            border-radius: 20px !important
+        }
+
+        #fullscreen-btn:hover {
+            background: rgba(10, 132, 255, 0.12) !important
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .slide.active>* {
+            animation: fadeUp 0.35s ease-out both
+        }
+
+        .slide.active>*:nth-child(2) {
+            animation-delay: 0.06s
+        }
+
+        .slide.active>*:nth-child(3) {
+            animation-delay: 0.12s
+        }
+
+        .slide.active>*:nth-child(4) {
+            animation-delay: 0.18s
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 24px;
+            right: 32px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text3);
+            letter-spacing: 0.1em;
+            z-index: 2
+        }
+
+
+        .section-tag {
+            position: absolute;
+            top: 24px;
+            left: 32px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--blue);
+            z-index: 2;
+            background: rgba(10, 132, 255, 0.08);
+            padding: 3px 10px;
+            border-radius: 20px;
+            display: none
+        }
+
+        .large-quote {
+            font-size: 64px;
+            font-weight: 900;
+            color: var(--blue);
+            text-align: center;
+            letter-spacing: -0.03em;
+            line-height: 1.1
+        }
+
+        .quote-sub {
+            font-size: 18px;
+            color: var(--text2);
+            text-align: center;
+            margin-top: 16px;
+            font-weight: 400
+        }
+
+        .metric-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--text)
+        }
+
+        .metric-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 4px
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.05em
+        }
+
+        .badge-green {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--green);
+            border: 1px solid rgba(34, 197, 94, 0.2)
+        }
+
+        .badge-red {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--red);
+            border: 1px solid rgba(239, 68, 68, 0.2)
+        }
+
+        .badge-blue {
+            background: rgba(10, 132, 255, 0.1);
+            color: var(--blue);
+            border: 1px solid rgba(10, 132, 255, 0.2)
+        }
+
+        .badge-amber {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--amber);
+            border: 1px solid rgba(245, 158, 11, 0.2)
+        }
+
+        .step-row {
+            display: flex;
+            align-items: center;
+            gap: 16px
+        }
+
+        .step-num {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid var(--blue30);
+            background: rgba(10, 132, 255, 0.1);
+            font-weight: 900;
+            color: var(--blue);
+            font-size: 16px
+        }
+
+        .step-bar {
+            flex: 1;
+            padding: 14px 20px;
+            background: var(--bg2);
+            border: 1px solid rgba(10, 132, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        /* Scaling handled dynamically by JS resize() */
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <svg style="position:absolute;width:0;height:0">
+            <defs>
+                <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+                    orient="auto-start-reverse">
+                    <path d="M0 1L10 5L0 9z" fill="#0a84ff" />
+                </marker>
+                <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+                    orient="auto-start-reverse">
+                    <path d="M0 1L10 5L0 9z" fill="#22C55E" />
+                </marker>
+                <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+                    orient="auto-start-reverse">
+                    <path d="M0 1L10 5L0 9z" fill="#EF4444" />
+                </marker>
+                <marker id="arrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+                    orient="auto-start-reverse">
+                    <path d="M0 1L10 5L0 9z" fill="#F59E0B" />
+                </marker>
+                <marker id="arrowGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+                    orient="auto-start-reverse">
+                    <path d="M0 1L10 5L0 9z" fill="#9099A1" />
+                </marker>
+            </defs>
+        </svg>
+
+        <div id="deck-wrapper">
+
+            <!-- Slide 1: Title -->
+            <div class="slide centered active" data-section="GIT & OPENCODE">
+                <div class="glow-center"></div>
+                <img src="https://cdn.prod.website-files.com/67a4c547ac46cdf433fcc313/67b4539996b1d9ec315a12c7_logo-footer.svg" alt="Cubbit" style="height:32px;margin-bottom:24px;position:relative;z-index:1;opacity:0.9">
+                <h1 class="s-title" style="font-size:56px">Git &amp; OpenCode</h1>
+                <p class="s-subtitle" style="font-size:22px;margin-top:20px">First steps in version control and AI-assisted development</p>
+            </div>
+
+            <!-- Slide 2: Git Basics -->
+            <div class="slide" data-section="GIT"><span class="section-tag">Git</span>
+                <div class="s-section">Version Control</div>
+                <h2 class="s-title" style="font-size:38px">Git: commit, branch, switch, merge</h2>
+                <div class="split" style="flex:1;align-items:center;margin-top:16px">
+                    <div class="half" style="display:flex;flex-direction:column;gap:10px;justify-content:center">
+                        <div class="card" style="padding:12px 16px;display:flex;align-items:center;gap:12px">
+                            <div style="width:32px;height:32px;border-radius:8px;background:rgba(10,132,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--blue30)">
+                                <span style="font-size:12px;font-weight:900;color:var(--blue)">1</span>
+                            </div>
+                            <div style="flex:1">
+                                <div style="font-size:14px;font-weight:700;color:var(--blue)">commit</div>
+                                <div style="font-size:11px;color:var(--text2);margin-top:1px">Save a snapshot of your work</div>
+                            </div>
+                        </div>
+                        <div class="card" style="padding:12px 16px;display:flex;align-items:center;gap:12px">
+                            <div style="width:32px;height:32px;border-radius:8px;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--green30)">
+                                <span style="font-size:12px;font-weight:900;color:var(--green)">2</span>
+                            </div>
+                            <div style="flex:1">
+                                <div style="font-size:14px;font-weight:700;color:var(--green)">branch</div>
+                                <div style="font-size:11px;color:var(--text2);margin-top:1px">Create an isolated line of development</div>
+                            </div>
+                        </div>
+                        <div class="card" style="padding:12px 16px;display:flex;align-items:center;gap:12px">
+                            <div style="width:32px;height:32px;border-radius:8px;background:rgba(245,158,11,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--amber30)">
+                                <span style="font-size:12px;font-weight:900;color:var(--amber)">3</span>
+                            </div>
+                            <div style="flex:1">
+                                <div style="font-size:14px;font-weight:700;color:var(--amber)">switch</div>
+                                <div style="font-size:11px;color:var(--text2);margin-top:1px">Move between branches</div>
+                            </div>
+                        </div>
+                        <div class="card" style="padding:12px 16px;display:flex;align-items:center;gap:12px">
+                            <div style="width:32px;height:32px;border-radius:8px;background:rgba(239,68,68,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--red30)">
+                                <span style="font-size:12px;font-weight:900;color:var(--red)">4</span>
+                            </div>
+                            <div style="flex:1">
+                                <div style="font-size:14px;font-weight:700;color:var(--red)">merge</div>
+                                <div style="font-size:11px;color:var(--text2);margin-top:1px">Combine changes from different branches</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="half diagram"><svg viewBox="0 0 480 340">
+                            <!-- Background labels -->
+                            <text x="10" y="72" fill="var(--blue)" font-size="13" font-family="Source Sans 3" font-weight="800" text-anchor="start">main</text>
+                            <text x="10" y="197" fill="var(--green)" font-size="13" font-family="Source Sans 3" font-weight="800" text-anchor="start">feature</text>
+
+                            <!-- main line -->
+                            <line x1="55" y1="70" x2="440" y2="70" stroke="var(--blue)" stroke-width="3" />
+                            <!-- feature line -->
+                            <line x1="210" y1="195" x2="440" y2="195" stroke="var(--green)" stroke-width="3" />
+
+                            <!-- main commits -->
+                            <circle cx="80" cy="70" r="22" fill="var(--bg2)" stroke="var(--blue)" stroke-width="3" />
+                            <text x="80" y="74" fill="var(--blue)" font-size="12" font-family="Source Sans 3" font-weight="800" text-anchor="middle">C1</text>
+
+                            <circle cx="190" cy="70" r="22" fill="var(--bg2)" stroke="var(--blue)" stroke-width="3" />
+                            <text x="190" y="74" fill="var(--blue)" font-size="12" font-family="Source Sans 3" font-weight="800" text-anchor="middle">C2</text>
+
+                            <circle cx="300" cy="70" r="22" fill="var(--bg2)" stroke="var(--blue)" stroke-width="3" />
+                            <text x="300" y="74" fill="var(--blue)" font-size="12" font-family="Source Sans 3" font-weight="800" text-anchor="middle">C3</text>
+
+                            <circle cx="420" cy="70" r="22" fill="var(--bg2)" stroke="var(--blue)" stroke-width="3" />
+                            <text x="420" y="74" fill="var(--blue)" font-size="12" font-family="Source Sans 3" font-weight="800" text-anchor="middle">C7</text>
+
+                            <!-- feature commits -->
+                            <circle cx="210" cy="195" r="22" fill="var(--bg2)" stroke="var(--green)" stroke-width="3" />
+                            <text x="210" y="199" fill="var(--green)" font-size="12" font-family="Source Sans 3" font-weight="800" text-anchor="middle">C4</text>
+
+                            <circle cx="300" cy="195" r="22" fill="var(--bg2)" stroke="var(--green)" stroke-width="3" />
+                            <text x="300" y="199" fill="var(--green)" font-size="12" font-family="Source Sans 3" font-weight="800" text-anchor="middle">C5</text>
+
+                            <circle cx="420" cy="195" r="22" fill="var(--bg2)" stroke="var(--green)" stroke-width="3" />
+                            <text x="420" y="199" fill="var(--green)" font-size="12" font-family="Source Sans 3" font-weight="800" text-anchor="middle">C6</text>
+
+                            <!-- Arrow: C3 -> C4 (branch) -->
+                            <line x1="300" y1="92" x2="210" y2="173" stroke="var(--amber)" stroke-width="3" marker-end="url(#arrowAmber)" />
+
+                            <!-- Arrow: C6 -> C7 (merge) -->
+                            <line x1="420" y1="173" x2="420" y2="92" stroke="var(--red)" stroke-width="3" marker-end="url(#arrowRed)" />
+
+                            <!-- Label: git switch -c feature -->
+                            <rect x="175" y="115" width="145" height="30" rx="6" fill="var(--bg2)" stroke="var(--amber)" stroke-width="2" />
+                            <text x="247" y="135" fill="var(--amber)" font-size="10" font-family="Source Sans 3" font-weight="700" text-anchor="middle">git switch -c feature</text>
+
+                            <!-- Label: git merge feature -->
+                            <rect x="362" y="115" width="115" height="30" rx="6" fill="var(--bg2)" stroke="var(--red)" stroke-width="2" />
+                            <text x="420" y="135" fill="var(--red)" font-size="10" font-family="Source Sans 3" font-weight="700" text-anchor="middle">git merge feature</text>
+
+                            <!-- Footer legend -->
+                            <rect x="40" y="280" width="410" height="40" rx="6" fill="var(--bg2)" stroke="var(--blue15)" stroke-width="1" />
+                            <text x="245" y="296" fill="var(--text2)" font-size="9" font-family="Source Sans 3" font-weight="600" text-anchor="middle">Each circle is a commit (snapshot of your code)</text>
+                            <text x="245" y="310" fill="var(--text3)" font-size="8" font-family="Source Sans 3" font-weight="500" text-anchor="middle">Feature branch evolves independently → merged back into main</text>
+                        </svg></div>
+                </div>
+            </div>
+
+            <!-- Slide 3: OpenCode -->
+            <div class="slide" data-section="OPENCODE"><span class="section-tag">OpenCode</span>
+                <div class="s-section">AI-Assisted Development</div>
+                <h2 class="s-title" style="font-size:38px">OpenCode: an AI agent in the terminal</h2>
+                <div class="split" style="flex:1;align-items:center;margin-top:20px">
+                    <div class="half" style="display:flex;flex-direction:column;gap:16px;justify-content:center">
+                        <p class="s-body" style="font-size:16px;line-height:1.7">An AI coding assistant that works <strong>directly in the terminal</strong>. It understands your codebase, searches files, edits code, runs commands, and commits changes — all through natural language.</p>
+                        <div class="card card-blue" style="padding:14px 16px">
+                            <div class="card-title" style="font-size:14px"><i class="fa-solid fa-comment" style="color:var(--blue);margin-right:6px"></i>Natural Language</div>
+                            <div class="card-body" style="margin-top:4px;font-size:12px">Describe what you want in plain English — OpenCode figures out how to do it.</div>
+                        </div>
+                        <div class="card card-green" style="padding:14px 16px">
+                            <div class="card-title" style="font-size:14px"><i class="fa-solid fa-code" style="color:var(--green);margin-right:6px"></i>Code &amp; Commands</div>
+                            <div class="card-body" style="margin-top:4px;font-size:12px">Reads, writes, and edits files. Runs terminals commands, installs packages, creates commits.</div>
+                        </div>
+                        <div class="card card-amber" style="padding:14px 16px">
+                            <div class="card-title" style="font-size:14px"><i class="fa-solid fa-git-alt" style="color:var(--amber);margin-right:6px"></i>Git Aware</div>
+                            <div class="card-body" style="margin-top:4px;font-size:12px">Works with the repo: checks status, diffs changes, stages and commits code.</div>
+                        </div>
+                    </div>
+                    <div class="half diagram"><svg viewBox="0 0 380 340">
+                            <!-- Flow arrows and boxes -->
+                            <rect x="80" y="10" width="220" height="40" rx="8" fill="var(--bg2)" stroke="var(--blue)" stroke-width="1.5" />
+                            <text x="190" y="30" fill="var(--blue)" font-size="10" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Your Request</text>
+                            <text x="190" y="43" fill="var(--text3)" font-size="7" font-family="Source Sans 3" text-anchor="middle">"add dark mode toggle"</text>
+
+                            <line x1="190" y1="50" x2="190" y2="72" stroke="var(--blue)" stroke-width="1.5" marker-end="url(#arrowBlue)" />
+
+                            <rect x="60" y="75" width="260" height="40" rx="8" fill="var(--bg2)" stroke="var(--amber)" stroke-width="1.5" />
+                            <text x="190" y="93" fill="var(--amber)" font-size="10" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Reads the codebase</text>
+                            <text x="190" y="107" fill="var(--text3)" font-size="7" font-family="Source Sans 3" text-anchor="middle">settings.tsx · App.tsx · styles/*</text>
+
+                            <line x1="190" y1="115" x2="190" y2="137" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arrowAmber)" />
+
+                            <rect x="60" y="140" width="260" height="40" rx="8" fill="var(--bg2)" stroke="var(--green)" stroke-width="1.5" />
+                            <text x="190" y="158" fill="var(--green)" font-size="10" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Edits files</text>
+                            <text x="190" y="172" fill="var(--text3)" font-size="7" font-family="Source Sans 3" text-anchor="middle">Creates SettingsToggle · Updates CSS</text>
+
+                            <line x1="190" y1="180" x2="190" y2="202" stroke="var(--green)" stroke-width="1.5" marker-end="url(#arrowGreen)" />
+
+                            <rect x="60" y="205" width="260" height="40" rx="8" fill="var(--bg2)" stroke="var(--blue)" stroke-width="1.5" />
+                            <text x="190" y="223" fill="var(--blue)" font-size="10" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Verifies &amp; commits</text>
+                            <text x="190" y="237" fill="var(--text3)" font-size="7" font-family="Source Sans 3" text-anchor="middle">Runs linter · git commit</text>
+
+                            <line x1="190" y1="245" x2="190" y2="275" stroke="var(--blue)" stroke-width="1.5" marker-end="url(#arrowBlue)" />
+
+                            <rect x="80" y="278" width="220" height="40" rx="8" fill="var(--bg2)" stroke="var(--green)" stroke-width="2" />
+                            <text x="190" y="298" fill="var(--green)" font-size="10" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Done</text>
+                            <text x="190" y="311" fill="var(--text3)" font-size="7" font-family="Source Sans 3" text-anchor="middle">Result: working feature</text>
+
+                            <!-- Badge overlay -->
+                            <rect x="2" y="320" width="376" height="18" rx="4" fill="rgba(10,132,255,0.06)" stroke="var(--blue15)" stroke-width="0.5" />
+                            <text x="190" y="329" fill="var(--text2)" font-size="7" font-family="Source Sans 3" font-weight="600" text-anchor="middle" dominant-baseline="central">All via natural language — no manual file navigation</text>
+                        </svg></div>
+                </div>
+            </div>
+
+        </div><!-- end deck-wrapper -->
+
+        <div id="progress"></div>
+        <div id="controls">
+            <img src="https://cdn.prod.website-files.com/67a4c547ac46cdf433fcc313/67b4539996b1d9ec315a12c7_logo-footer.svg" alt="Cubbit" style="height:16px;opacity:0.8">
+            <span style="width:1px;height:16px;background:rgba(255,255,255,0.1);display:block"></span>
+            <span id="section-label">THE HOOK</span>
+            <button id="btn-prev" title="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
+            <span id="slide-counter">1 / 53</span>
+            <button id="btn-next" title="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
+            <button id="download-btn" title="Download this deck"><i class="fa-solid fa-download"></i></button>
+            <button id="fullscreen-btn" title="Toggle fullscreen"><i class="fa-solid fa-expand"></i></button>
+        </div>
+    </div><!-- end app -->
+
+    <script>
+        (function ()
+        {
+            const slides = document.querySelectorAll('.slide');
+            const total = slides.length;
+            let current = 0;
+
+            const counter = document.getElementById('slide-counter');
+            const progress = document.getElementById('progress');
+            const sectionLabel = document.getElementById('section-label');
+
+            function goTo(n)
+            {
+                if(n < 0 || n >= total) return;
+                slides[current].classList.remove('active');
+                current = n;
+                slides[current].classList.add('active');
+                counter.textContent = (current + 1) + ' / ' + total;
+                progress.style.width = ((current + 1) / total * 100) + '%';
+                const sec = slides[current].getAttribute('data-section') || '';
+                sectionLabel.textContent = sec;
+                try {localStorage.setItem('slide', current);} catch(e) {}
+                history.replaceState(null, '', '#' + (current + 1));
+            }
+
+            document.getElementById('btn-prev').addEventListener('click', function () {goTo(current - 1);});
+            document.getElementById('btn-next').addEventListener('click', function () {goTo(current + 1);});
+
+            document.addEventListener('keydown', function (e)
+            {
+                if(e.key === 'ArrowRight' || e.key === ' ') {e.preventDefault(); goTo(current + 1);}
+                else if(e.key === 'ArrowLeft') {e.preventDefault(); goTo(current - 1);}
+                else if(e.key === 'Home') {e.preventDefault(); goTo(0);}
+                else if(e.key === 'End') {e.preventDefault(); goTo(total - 1);}
+            });
+
+            // Touch navigation
+            let touchStartX = 0;
+            document.addEventListener('touchstart', function (e) {touchStartX = e.changedTouches[0].screenX;});
+            document.addEventListener('touchend', function (e)
+            {
+                const diff = e.changedTouches[0].screenX - touchStartX;
+                if(Math.abs(diff) > 50) {diff < 0 ? goTo(current + 1) : goTo(current - 1);}
+            });
+
+            // Scale deck to fill viewport
+            function resize()
+            {
+                const wrapper = document.getElementById('deck-wrapper');
+                const scaleX = window.innerWidth / 1280;
+                const scaleY = window.innerHeight / 720;
+                const scale = Math.min(scaleX, scaleY);
+                wrapper.style.transform = 'scale(' + scale + ')';
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Download button
+            document.getElementById('download-btn').addEventListener('click', function ()
+            {
+                var a = document.createElement('a');
+                a.href = window.location.href;
+                a.download = 'slides.html';
+                a.click();
+            });
+
+            // Fullscreen toggle
+            document.getElementById('fullscreen-btn').addEventListener('click', function ()
+            {
+                if(!document.fullscreenElement)
+                {
+                    document.documentElement.requestFullscreen().then(resize);
+                } else
+                {
+                    document.exitFullscreen().then(resize);
+                }
+            });
+            document.addEventListener('fullscreenchange', function ()
+            {
+                var icon = document.querySelector('#fullscreen-btn i');
+                if(document.fullscreenElement)
+                {
+                    icon.className = 'fa-solid fa-compress';
+                } else
+                {
+                    icon.className = 'fa-solid fa-expand';
+                }
+                setTimeout(resize, 100);
+            });
+
+            // Fix slide numbers and inject watermark logo
+            slides.forEach(function (s, i)
+            {
+                var num = s.querySelector('.slide-number');
+                if(num) num.textContent = String(i + 1).padStart(2, '0') + ' / ' + total;
+            });
+
+            // Restore slide from URL hash or localStorage
+            var start = 0;
+            var hash = parseInt(location.hash.replace('#', ''), 10);
+            if(hash >= 1 && hash <= total) {start = hash - 1;}
+            else {try {var saved = parseInt(localStorage.getItem('slide'), 10); if(saved >= 0 && saved < total) start = saved;} catch(e) {} }
+            goTo(start);
+        })();
+    </script>
+</body>
+
+</html>
