@@ -882,58 +882,74 @@
             <!-- Slide 5: git switch vs git checkout -->
             <div class="slide" data-section="GIT"><span class="section-tag">Git</span>
                 <div class="s-section">Advanced Git</div>
-                <h2 class="s-title" style="font-size:38px">git switch vs git checkout</h2>
-                <div class="split" style="flex:1;align-items:center;margin-top:12px">
-                    <div class="half" style="display:flex;flex-direction:column;gap:8px;justify-content:center">
-                        <p class="s-body" style="font-size:15px;line-height:1.6">In Git 2.23 (2019), <code style="font-family:'JetBrains Mono',monospace;background:var(--bg2);padding:1px 6px;border-radius:4px;font-size:13px">git switch</code> and <code style="font-family:'JetBrains Mono',monospace;background:var(--bg2);padding:1px 6px;border-radius:4px;font-size:13px">git restore</code> were introduced to <strong>split the responsibilities</strong> of the overloaded <code style="font-family:'JetBrains Mono',monospace;background:var(--bg2);padding:1px 6px;border-radius:4px;font-size:13px">git checkout</code>.</p>
-                        <div class="cols-2" style="margin-top:4px">
-                            <div class="card card-amber" style="padding:16px">
-                                <div class="card-label" style="color:var(--amber)"><i class="fa-solid fa-code-branch" style="margin-right:4px"></i> git checkout</div>
-                                <div class="card-title" style="font-size:15px;margin-bottom:8px">The old swiss army knife</div>
-                                <div style="font-size:12.5px;color:var(--text2);line-height:1.7">
-                                    <div style="margin-bottom:6px">Does <strong>everything</strong>:</div>
-                                    <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:11.5px;margin-bottom:4px;line-height:1.8">
-                                        <span style="color:var(--amber)">git checkout &lt;branch&gt;</span><br>
-                                        <span style="color:var(--text3)">// switch branches</span>
-                                    </div>
-                                    <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.8">
-                                        <span style="color:var(--amber)">git checkout -- &lt;file&gt;</span><br>
-                                        <span style="color:var(--text3)">// discard changes</span>
-                                    </div>
-                                    <div style="margin-top:8px;padding:6px 10px;background:rgba(245,158,11,0.08);border-radius:6px;border:1px solid rgba(245,158,11,0.15)">
-                                        <span style="color:var(--amber);font-weight:700">Danger:</span>
-                                        <span style="color:var(--text2)"> If a branch name matches a filename, checkout may do the wrong thing!</span>
-                                    </div>
-                                </div>
+                <h2 class="s-title" style="font-size:38px">git checkout faceva TUTTO</h2>
+                <div class="s-subtitle" style="font-size:16px;margin-top:4px;margin-bottom:8px">Poi Git 2.23 (2019) ha separato i compiti in <strong>switch</strong> (branch) e <strong>restore</strong> (file)</div>
+                <div class="cols-2" style="flex:1;align-items:stretch;margin-top:4px">
+                    <div class="card card-amber" style="padding:16px;display:flex;flex-direction:column">
+                        <div class="card-label" style="color:var(--amber);margin-bottom:4px"><i class="fa-solid fa-spaghetti" style="margin-right:4px"></i> git checkout (old)</div>
+                        <div class="card-title" style="font-size:16px;margin-bottom:10px">Un unico comando, troppe responsabilità</div>
+                        <div style="font-size:13px;color:var(--text2);line-height:1.7;flex:1">
+                            <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                <span style="color:var(--amber)">git checkout &lt;branch&gt;</span>
+                                <span style="color:var(--text3);float:right">cambia branch</span>
                             </div>
-                            <div class="card card-green" style="padding:16px">
-                                <div class="card-label" style="color:var(--green)"><i class="fa-solid fa-arrows-split-up-and-left" style="margin-right:4px"></i> git switch / restore</div>
-                                <div class="card-title" style="font-size:15px;margin-bottom:8px">The modern split</div>
-                                <div style="font-size:12.5px;color:var(--text2);line-height:1.7">
-                                    <div style="margin-bottom:6px"><span style="color:var(--green);font-weight:700">One command, one job:</span></div>
-                                    <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:11.5px;margin-bottom:4px;line-height:1.8">
-                                        <span style="color:var(--green)">git switch &lt;branch&gt;</span><br>
-                                        <span style="color:var(--text3)">// switch (context: branch)</span>
-                                    </div>
-                                    <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:11.5px;margin-bottom:4px;line-height:1.8">
-                                        <span style="color:var(--green)">git switch -c &lt;new&gt;</span><br>
-                                        <span style="color:var(--text3)">// create &amp; switch</span>
-                                    </div>
-                                    <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.8">
-                                        <span style="color:var(--green)">git restore &lt;file&gt;</span><br>
-                                        <span style="color:var(--text3)">// restore file (was checkout --)</span>
-                                    </div>
-                                    <div style="margin-top:8px;padding:6px 10px;background:rgba(34,197,94,0.08);border-radius:6px;border:1px solid rgba(34,197,94,0.15)">
-                                        <span style="color:var(--green);font-weight:700">Safer:</span>
-                                        <span style="color:var(--text2)"> No ambiguity — branch vs file operations never overlap.</span>
-                                    </div>
+                            <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                <span style="color:var(--amber)">git checkout -b &lt;new&gt;</span>
+                                <span style="color:var(--text3);float:right">crea e cambia branch</span>
+                            </div>
+                            <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                <span style="color:var(--amber)">git checkout -- &lt;file&gt;</span>
+                                <span style="color:var(--text3);float:right">scarta modifiche locali</span>
+                            </div>
+                            <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                <span style="color:var(--amber)">git checkout &lt;commit&gt; -- &lt;file&gt;</span>
+                                <span style="color:var(--text3);float:right">recupera file da commit</span>
+                            </div>
+                            <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                <span style="color:var(--amber)">git checkout &lt;commit&gt;</span>
+                                <span style="color:var(--text3);float:right">HEAD staccato (detached)</span>
+                            </div>
+                            <div style="margin-top:10px;padding:6px 10px;background:rgba(245,158,11,0.08);border-radius:6px;border:1px solid rgba(245,158,11,0.15)">
+                                <span style="color:var(--amber);font-weight:700">Problema:</span>
+                                <span style="color:var(--text2)"> se branch e file hanno lo stesso nome, Git non sa cosa fare → ambiguità</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:8px">
+                        <div class="card card-green" style="padding:16px;flex:1">
+                            <div class="card-label" style="color:var(--green);margin-bottom:4px"><i class="fa-solid fa-code-branch" style="margin-right:4px"></i> git switch (new)</div>
+                            <div class="card-title" style="font-size:16px;margin-bottom:10px">Solo branch: chiaro e safe</div>
+                            <div style="font-size:13px;color:var(--text2);line-height:1.7">
+                                <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                    <span style="color:var(--green)">git switch &lt;branch&gt;</span>
+                                    <span style="color:var(--text3);float:right">cambia branch</span>
+                                </div>
+                                <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                    <span style="color:var(--green)">git switch -c &lt;new&gt;</span>
+                                    <span style="color:var(--text3);float:right">crea e cambia</span>
+                                </div>
+                                <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                    <span style="color:var(--green)">git switch --detach &lt;commit&gt;</span>
+                                    <span style="color:var(--text3);float:right">HEAD staccato (esplicito)</span>
+                                </div>
+                                <div style="margin-top:10px;padding:8px 10px;background:rgba(34,197,94,0.08);border-radius:6px;border:1px solid rgba(34,197,94,0.15)">
+                                    <span style="color:var(--green);font-weight:700">Vantaggio:</span>
+                                    <span style="color:var(--text2)"> un solo compito → nessuna ambiguità. Se provi a fare <code style="font-family:'JetBrains Mono',monospace;background:var(--bg3);padding:0 4px;border-radius:3px;font-size:11px">switch file</code>, Git rifiuta.</span>
                                 </div>
                             </div>
                         </div>
-                        <div style="display:flex;gap:10px;margin-top:2px">
-                            <div style="flex:1;background:var(--bg2);border-radius:8px;padding:10px 14px;border:1px solid var(--blue15)">
-                                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--blue);margin-bottom:4px"><i class="fa-solid fa-check-circle" style="color:var(--green);margin-right:4px"></i> Pro tip</div>
-                                <div style="font-size:12px;color:var(--text2)">Use <code style="font-family:'JetBrains Mono',monospace;background:var(--bg3);padding:0 4px;border-radius:3px;font-size:11px">git switch</code> for branches and <code style="font-family:'JetBrains Mono',monospace;background:var(--bg3);padding:0 4px;border-radius:3px;font-size:11px">git restore</code> for files — the old <code style="font-family:'JetBrains Mono',monospace;background:var(--bg3);padding:0 4px;border-radius:3px;font-size:11px">checkout</code> still works but is no longer the recommended way.</div>
+                        <div class="card card-amber" style="padding:16px">
+                            <div class="card-label" style="color:var(--blue);margin-bottom:4px"><i class="fa-solid fa-rotate-left" style="margin-right:4px"></i> git restore (new)</div>
+                            <div class="card-title" style="font-size:16px;margin-bottom:10px">Solo file: l'ex checkout --</div>
+                            <div style="font-size:13px;color:var(--text2);line-height:1.7">
+                                <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:4px;line-height:1.8">
+                                    <span style="color:var(--blue)">git restore &lt;file&gt;</span>
+                                    <span style="color:var(--text3);float:right">scarta modifiche</span>
+                                </div>
+                                <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8">
+                                    <span style="color:var(--blue)">git restore --source=&lt;commit&gt; &lt;file&gt;</span>
+                                    <span style="color:var(--text3);float:right">recupera da commit</span>
+                                </div>
                             </div>
                         </div>
                     </div>
