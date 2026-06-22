@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slack Desk Bot — Presentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #060910;
+            --bg2: #0c1018;
+            --bg3: #141c2a;
+            --text: #ffffff;
+            --text2: #e0e4ea;
+            --text3: #9099A1;
+            --blue: #0a84ff;
+            --blue30: rgba(10, 132, 255, 0.3);
+            --blue15: rgba(10, 132, 255, 0.15);
+            --blue08: rgba(10, 132, 255, 0.08);
+            --cyan: #00d4ff;
+            --green: #22C55E;
+            --green30: rgba(34, 197, 94, 0.3);
+            --amber: #F59E0B;
+            --amber30: rgba(245, 158, 11, 0.3);
+            --red: #EF4444;
+            --red30: rgba(239, 68, 68, 0.3);
+            --radius: 12px
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            background: #060910;
+            font-family: 'Source Sans 3', sans-serif;
+            color: var(--text)
+        }
+
+        #app {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative
+        }
+
+        #deck-wrapper {
+            position: relative;
+            width: 1280px;
+            height: 720px;
+            transform-origin: center center
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            background: var(--bg);
+            border-radius: 4px;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            padding: 56px 64px
+        }
+
+        .slide.active {
+            display: flex
+        }
+
+        .glow-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 400px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(ellipse, rgba(10, 132, 255, 0.12) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0
+        }
+
+        .s-title {
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            color: var(--text);
+            position: relative;
+            z-index: 1
+        }
+
+        .s-subtitle {
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--text2);
+            margin-top: 12px;
+            position: relative;
+            z-index: 1
+        }
+
+        .s-section {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--blue);
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1
+        }
+
+        .s-body {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--text2);
+            line-height: 1.6;
+            position: relative;
+            z-index: 1
+        }
+
+        .s-body strong {
+            color: var(--text);
+            font-weight: 600
+        }
+
+        .centered {
+            justify-content: center;
+            align-items: center;
+            text-align: center
+        }
+
+        .split {
+            display: flex;
+            flex-direction: row;
+            gap: 48px
+        }
+
+        .split>.half {
+            flex: 1;
+            min-width: 0
+        }
+
+        .cols-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+            position: relative;
+            z-index: 1
+        }
+
+        .cols-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            position: relative;
+            z-index: 1
+        }
+
+        .card {
+            background: var(--bg2);
+            border: 1px solid rgba(10, 132, 255, 0.15);
+            border-radius: var(--radius);
+            padding: 24px;
+            position: relative
+        }
+
+        .card-blue {
+            border-color: var(--blue30);
+            box-shadow: 0 0 20px rgba(10, 132, 255, 0.05)
+        }
+
+        .card-red {
+            border-color: var(--red30)
+        }
+
+        .card-green {
+            border-color: var(--green30)
+        }
+
+        .card-amber {
+            border-color: var(--amber30)
+        }
+
+        .card-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--blue);
+            margin-bottom: 8px
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px
+        }
+
+        .card-body {
+            font-size: 14px;
+            color: var(--text2);
+            line-height: 1.5
+        }
+
+        .diagram {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .diagram svg {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%
+        }
+
+        .code-block {
+            background: #0D1117;
+            border: 1px solid rgba(10, 132, 255, 0.15);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            white-space: pre-wrap
+        }
+
+        .code-block .key {
+            color: var(--blue)
+        }
+
+        .code-block .str {
+            color: var(--green)
+        }
+
+        .code-block .num {
+            color: var(--amber)
+        }
+
+        .code-block .comment {
+            color: var(--text3)
+        }
+
+        #progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--blue);
+            transition: width 0.3s ease;
+            z-index: 100;
+            border-radius: 0 0 2px 2px
+        }
+
+        #controls {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 100;
+            background: rgba(11, 15, 20, 0.92);
+            backdrop-filter: blur(12px);
+            padding: 8px 18px;
+            border-radius: 40px;
+            border: 1px solid rgba(10, 132, 255, 0.12)
+        }
+
+        #controls button {
+            background: none;
+            border: none;
+            color: var(--text2);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: all 0.2s
+        }
+
+        #controls button:hover {
+            color: var(--text);
+            background: rgba(10, 132, 255, 0.1)
+        }
+
+        #slide-counter {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text2);
+            min-width: 60px;
+            text-align: center
+        }
+
+        #section-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--blue);
+            padding: 4px 12px;
+            background: rgba(10, 132, 255, 0.08);
+            border-radius: 20px;
+            white-space: nowrap
+        }
+
+        #download-btn {
+            color: var(--blue) !important;
+            font-size: 13px !important;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px !important;
+            border: 1px solid rgba(10, 132, 255, 0.2) !important;
+            border-radius: 20px !important
+        }
+
+        #download-btn:hover {
+            background: rgba(10, 132, 255, 0.12) !important
+        }
+
+        #fullscreen-btn {
+            color: var(--blue) !important;
+            font-size: 13px !important;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px !important;
+            border: 1px solid rgba(10, 132, 255, 0.2) !important;
+            border-radius: 20px !important
+        }
+
+        #fullscreen-btn:hover {
+            background: rgba(10, 132, 255, 0.12) !important
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px)
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .slide.active>* {
+            animation: fadeUp 0.35s ease-out both
+        }
+
+        .slide.active>*:nth-child(2) {
+            animation-delay: 0.06s
+        }
+
+        .slide.active>*:nth-child(3) {
+            animation-delay: 0.12s
+        }
+
+        .slide.active>*:nth-child(4) {
+            animation-delay: 0.18s
+        }
+
+        .slide.compact {
+            padding: 18px 28px 18px 0
+        }
+
+        .slide.compact .split {
+            gap: 6px
+        }
+
+        .slide.compact .half .code-block {
+            padding: 8px 8px
+        }
+
+        .slide.compact .half .card {
+            padding: 7px 10px
+        }
+
+        .slide.compact .step-bar {
+            justify-content: flex-start;
+            gap: 8px
+        }
+
+        .slide.compact .step-bar span:last-child {
+            margin-left: auto
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 24px;
+            right: 32px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text3);
+            letter-spacing: 0.1em;
+            z-index: 2
+        }
+
+        .section-tag {
+            position: absolute;
+            top: 24px;
+            left: 32px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--blue);
+            z-index: 2;
+            background: rgba(10, 132, 255, 0.08);
+            padding: 3px 10px;
+            border-radius: 20px;
+            display: none
+        }
+
+        .step-row {
+            display: flex;
+            align-items: center;
+            gap: 16px
+        }
+
+        .step-num {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid var(--blue30);
+            background: rgba(10, 132, 255, 0.1);
+            font-weight: 900;
+            color: var(--blue);
+            font-size: 16px
+        }
+
+        .step-bar {
+            flex: 1;
+            padding: 14px 20px;
+            background: var(--bg2);
+            border: 1px solid rgba(10, 132, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.05em
+        }
+
+        .badge-green {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--green);
+            border: 1px solid rgba(34, 197, 94, 0.2)
+        }
+
+        .badge-red {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--red);
+            border: 1px solid rgba(239, 68, 68, 0.2)
+        }
+
+        .badge-blue {
+            background: rgba(10, 132, 255, 0.1);
+            color: var(--blue);
+            border: 1px solid rgba(10, 132, 255, 0.2)
+        }
+
+        .badge-amber {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--amber);
+            border: 1px solid rgba(245, 158, 11, 0.2)
+        }
+
+        .code-line {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 4px 0
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <svg style="position:absolute;width:0;height:0">
+            <defs>
+                <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+                    orient="auto-start-reverse">
+                    <path d="M0 1L10 5L0 9z" fill="#0a84ff" />
+                </marker>
+                <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+                    orient="auto-start-reverse">
+                    <path d="M0 1L10 5L0 9z" fill="#22C55E" />
+                </marker>
+                <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+                    orient="auto-start-reverse">
+                    <path d="M0 1L10 5L0 9z" fill="#EF4444" />
+                </marker>
+                <marker id="arrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+                    orient="auto-start-reverse">
+                    <path d="M0 1L10 5L0 9z" fill="#F59E0B" />
+                </marker>
+                <marker id="arrowGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+                    orient="auto-start-reverse">
+                    <path d="M0 1L10 5L0 9z" fill="#9099A1" />
+                </marker>
+            </defs>
+        </svg>
+
+        <div id="deck-wrapper">
+
+            <!-- Slide 1: Title -->
+            <div class="slide centered active" data-section="SLACK DESK BOT">
+                <div class="glow-center"></div>
+                <div style="width:72px;height:72px;border-radius:16px;background:rgba(10,132,255,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:24px;position:relative;z-index:1;border:1px solid var(--blue30)">
+                    <i class="fa-solid fa-calendar-check" style="font-size:32px;color:var(--blue)"></i>
+                </div>
+                <h1 class="s-title" style="font-size:56px">Slack Desk Bot</h1>
+                <p class="s-subtitle" style="font-size:22px;margin-top:20px">Internal desk &amp; room booking bot for Slack</p>
+                <div style="display:flex;gap:12px;margin-top:36px;position:relative;z-index:1">
+                    <span class="badge badge-blue">Python</span>
+                    <span class="badge badge-green">Slack Bolt SDK</span>
+                    <span class="badge badge-amber">Socket Mode</span>
+                    <span class="badge badge-blue">SQLite</span>
+                </div>
+            </div>
+
+            <!-- Slide 2: What It Does -->
+            <div class="slide" data-section="PROJECT"><span class="section-tag">Project</span>
+                <div class="s-section">Overview</div>
+                <h2 class="s-title" style="font-size:38px">What the bot does</h2>
+                <div class="cols-3" style="flex:1;align-content:center;padding-top:16px">
+                    <div class="card card-blue" style="padding:28px 24px;display:flex;flex-direction:column;align-items:center;text-align:center">
+                        <div style="width:52px;height:52px;border-radius:14px;background:rgba(10,132,255,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:14px;border:1px solid var(--blue30)">
+                            <i class="fa-solid fa-desk" style="font-size:22px;color:var(--blue)"></i>
+                        </div>
+                        <div class="card-title" style="font-size:17px">Desk Booking</div>
+                        <div class="card-body" style="margin-top:6px">Book an available desk in any office via slash command or the home tab</div>
+                    </div>
+                    <div class="card card-green" style="padding:28px 24px;display:flex;flex-direction:column;align-items:center;text-align:center">
+                        <div style="width:52px;height:52px;border-radius:14px;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:14px;border:1px solid var(--green30)">
+                            <i class="fa-solid fa-door-open" style="font-size:22px;color:var(--green)"></i>
+                        </div>
+                        <div class="card-title" style="font-size:17px">Room Booking</div>
+                        <div class="card-body" style="margin-top:6px">Reserve meeting rooms across 2&ndash;3 offices with time-slot validation</div>
+                    </div>
+                    <div class="card card-amber" style="padding:28px 24px;display:flex;flex-direction:column;align-items:center;text-align:center">
+                        <div style="width:52px;height:52px;border-radius:14px;background:rgba(245,158,11,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:14px;border:1px solid var(--amber30)">
+                            <i class="fa-solid fa-chart-simple" style="font-size:22px;color:var(--amber)"></i>
+                        </div>
+                        <div class="card-title" style="font-size:17px">Occupancy View</div>
+                        <div class="card-body" style="margin-top:6px">See live occupancy bars per office on the Slack App Home tab</div>
+                    </div>
+                </div>
+                <div style="margin-top:12px;display:flex;gap:12px;align-items:center;justify-content:center;z-index:1;position:relative">
+                    <div class="card" style="padding:12px 18px;display:flex;align-items:center;gap:10px">
+                        <i class="fa-solid fa-database" style="color:var(--blue);font-size:14px"></i>
+                        <span style="font-size:13px;color:var(--text2)">SQLite (WAL mode) &mdash; no external DB needed</span>
+                    </div>
+                    <div class="card" style="padding:12px 18px;display:flex;align-items:center;gap:10px">
+                        <i class="fa-solid fa-bolt" style="color:var(--green);font-size:14px"></i>
+                        <span style="font-size:13px;color:var(--text2)">Socket Mode &mdash; no public HTTP endpoint</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Stack -->
+            <div class="slide" data-section="PROJECT"><span class="section-tag">Project</span>
+                <div class="s-section">Architecture</div>
+                <h2 class="s-title" style="font-size:38px">Tech stack</h2>
+                <div class="split" style="flex:1;align-items:center;margin-top:12px">
+                    <div class="half" style="display:flex;flex-direction:column;gap:14px;justify-content:center">
+                        <div class="card card-blue" style="padding:18px 20px;display:flex;align-items:center;gap:16px">
+                            <div style="width:44px;height:44px;border-radius:12px;background:rgba(10,132,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--blue30)">
+                                <i class="fa-brands fa-python" style="font-size:22px;color:var(--blue)"></i>
+                            </div>
+                            <div>
+                                <div class="card-title" style="font-size:15px;margin-bottom:2px">Python 3.11+</div>
+                                <div class="card-body" style="font-size:12px">Core language with strict typing (mypy strict mode)</div>
+                            </div>
+                        </div>
+                        <div class="card card-green" style="padding:18px 20px;display:flex;align-items:center;gap:16px">
+                            <div style="width:44px;height:44px;border-radius:12px;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--green30)">
+                                <i class="fa-solid fa-slack" style="font-size:22px;color:var(--green)"></i>
+                            </div>
+                            <div>
+                                <div class="card-title" style="font-size:15px;margin-bottom:2px">Slack Bolt SDK</div>
+                                <div class="card-body" style="font-size:12px">Socket Mode adapter &mdash; no web server required</div>
+                            </div>
+                        </div>
+                        <div class="card card-amber" style="padding:18px 20px;display:flex;align-items:center;gap:16px">
+                            <div style="width:44px;height:44px;border-radius:12px;background:rgba(245,158,11,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--amber30)">
+                                <i class="fa-solid fa-database" style="font-size:22px;color:var(--amber)"></i>
+                            </div>
+                            <div>
+                                <div class="card-title" style="font-size:15px;margin-bottom:2px">SQLite (WAL mode)</div>
+                                <div class="card-body" style="font-size:12px">Local database, zero configuration, concurrent reads</div>
+                            </div>
+                        </div>
+                        <div class="card card-red" style="padding:18px 20px;display:flex;align-items:center;gap:16px">
+                            <div style="width:44px;height:44px;border-radius:12px;background:rgba(239,68,68,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--red30)">
+                                <i class="fa-solid fa-clock" style="font-size:22px;color:var(--red)"></i>
+                            </div>
+                            <div>
+                                <div class="card-title" style="font-size:15px;margin-bottom:2px">APScheduler</div>
+                                <div class="card-body" style="font-size:12px">Scheduled cleanups and reminders</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="half diagram"><svg viewBox="0 0 460 340">
+                            <!-- Flow diagram -->
+                            <rect x="100" y="10" width="260" height="44" rx="8" fill="var(--bg2)" stroke="var(--blue)" stroke-width="1.5" />
+                            <text x="230" y="32" fill="var(--blue)" font-size="11" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Slack App (Socket Mode)</text>
+                            <text x="230" y="46" fill="var(--text3)" font-size="8" font-family="Source Sans 3" text-anchor="middle">WebSocket connection</text>
+
+                            <line x1="230" y1="54" x2="230" y2="80" stroke="var(--blue)" stroke-width="1.5" marker-end="url(#arrowBlue)" />
+
+                            <rect x="80" y="83" width="300" height="44" rx="8" fill="var(--bg2)" stroke="var(--green)" stroke-width="1.5" />
+                            <text x="230" y="105" fill="var(--green)" font-size="11" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Slack Bolt App (slack_bolt.App)</text>
+                            <text x="230" y="119" fill="var(--text3)" font-size="8" font-family="Source Sans 3" text-anchor="middle">Event handlers &bull; Slash commands &bull; Views</text>
+
+                            <line x1="150" y1="127" x2="150" y2="153" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arrowAmber)" />
+                            <line x1="310" y1="127" x2="310" y2="153" stroke="var(--green)" stroke-width="1.5" marker-end="url(#arrowGreen)" />
+
+                            <rect x="75" y="156" width="150" height="44" rx="8" fill="var(--bg2)" stroke="var(--amber)" stroke-width="1.5" />
+                            <text x="150" y="178" fill="var(--amber)" font-size="11" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Business Logic</text>
+                            <text x="150" y="192" fill="var(--text3)" font-size="8" font-family="Source Sans 3" text-anchor="middle">Services &bull; Repositories</text>
+
+                            <rect x="235" y="156" width="150" height="44" rx="8" fill="var(--bg2)" stroke="var(--green)" stroke-width="1.5" />
+                            <text x="310" y="178" fill="var(--green)" font-size="11" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">SQLite Database</text>
+                            <text x="310" y="192" fill="var(--text3)" font-size="8" font-family="Source Sans 3" text-anchor="middle">data/desk_bot.db (WAL mode)</text>
+
+                            <line x1="150" y1="200" x2="230" y2="226" stroke="var(--amber)" stroke-width="1" />
+                            <line x1="310" y1="200" x2="230" y2="226" stroke="var(--green)" stroke-width="1" />
+
+                            <rect x="80" y="229" width="300" height="44" rx="8" fill="var(--bg2)" stroke="var(--blue)" stroke-width="1.5" />
+                            <text x="230" y="251" fill="var(--blue)" font-size="11" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Slack Home Tab &amp; Responses</text>
+                            <text x="230" y="265" fill="var(--text3)" font-size="8" font-family="Source Sans 3" text-anchor="middle">views.publish &bull; chat.postMessage &bull; modals</text>
+
+                            <!-- Badge -->
+                            <rect x="40" y="310" width="380" height="28" rx="6" fill="var(--bg2)" stroke="var(--blue15)" stroke-width="0.5" />
+                            <text x="230" y="324" fill="var(--text2)" font-size="8" font-family="Source Sans 3" font-weight="600" text-anchor="middle" dominant-baseline="central">Python 3.11+ &bull; Slack Bolt SDK &bull; SQLite &bull; APScheduler</text>
+                        </svg></div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Slack App Settings -->
+            <div class="slide compact" data-section="SETUP"><span class="section-tag">Setup</span>
+                <div class="s-section">Step 1 &mdash; Slack App</div>
+                <h2 class="s-title" style="font-size:30px">Create and configure the Slack App</h2>
+                <div class="split" style="flex:1;align-items:center;margin-top:6px">
+                    <div class="half" style="display:flex;flex-direction:column;gap:5px;justify-content:center">
+                        <div class="step-row" style="gap:10px">
+                            <div class="step-num" style="width:32px;height:32px;font-size:13px">1</div>
+                            <div class="step-bar" style="padding:8px 14px">
+                                <span style="font-size:12px;font-weight:600;color:var(--text)">Create app</span>
+                                <span style="font-size:10px;color:var(--text2)">api.slack.com/apps → "From scratch"</span>
+                            </div>
+                        </div>
+                        <div class="step-row" style="gap:10px">
+                            <div class="step-num" style="width:32px;height:32px;font-size:13px">2</div>
+                            <div class="step-bar" style="padding:8px 14px">
+                                <span style="font-size:12px;font-weight:600;color:var(--text)">Enable Socket Mode</span>
+                                <span style="font-size:10px;color:var(--text2)">Socket Mode → ON (get xapp- token)</span>
+                            </div>
+                        </div>
+                        <div class="step-row" style="gap:10px">
+                            <div class="step-num" style="width:32px;height:32px;font-size:13px">3</div>
+                            <div class="step-bar" style="padding:8px 14px">
+                                <span style="font-size:12px;font-weight:600;color:var(--text)">Set Bot Token Scopes</span>
+                                <span style="font-size:10px;color:var(--text2)">OAuth &amp; Permissions → add scopes</span>
+                            </div>
+                        </div>
+                        <div class="card card-amber" style="padding:8px 14px;font-size:10px;line-height:1.5;margin-left:42px">
+                            <span style="color:var(--amber);font-weight:700">Required scopes:</span>
+                            <code style="font-family:JetBrains Mono;font-size:9px;color:var(--text2)">
+                                app_mentions:read &bull; channels:history &bull; chat:write<br>
+                                commands &bull; users:read &bull; reactions:read/write
+                            </code>
+                        </div>
+                        <div class="step-row" style="gap:10px">
+                            <div class="step-num" style="width:32px;height:32px;font-size:13px">4</div>
+                            <div class="step-bar" style="padding:8px 14px">
+                                <span style="font-size:12px;font-weight:600;color:var(--text)">Install to workspace</span>
+                                <span style="font-size:10px;color:var(--text2)">Get the xoxb- bot token</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="half" style="display:flex;flex-direction:column;gap:5px;justify-content:center">
+                        <div class="step-row" style="gap:10px">
+                            <div class="step-num" style="width:32px;height:32px;font-size:13px;border-color:var(--green30);background:rgba(34,197,94,0.1);color:var(--green)">5</div>
+                            <div class="step-bar" style="padding:8px 14px;border-color:var(--green30)">
+                                <span style="font-size:12px;font-weight:600;color:var(--text)">Enable App Home tab</span>
+                                <span style="font-size:10px;color:var(--text2)">App Home → toggle ON</span>
+                            </div>
+                        </div>
+                        <div class="card card-green" style="padding:6px 14px;font-size:10px;margin-left:42px;border-style:dashed">
+                            <i class="fa-solid fa-circle-exclamation" style="color:var(--green)"></i>
+                            <span style="color:var(--text2)"> Without this → <code style="font-family:JetBrains Mono;font-size:9px;color:var(--red)">not_enabled</code></span>
+                        </div>
+                        <div class="step-row" style="gap:10px">
+                            <div class="step-num" style="width:32px;height:32px;font-size:13px">6</div>
+                            <div class="step-bar" style="padding:8px 14px">
+                                <span style="font-size:12px;font-weight:600;color:var(--text)">Subscribe to events</span>
+                                <span style="font-size:10px;color:var(--text2)">app_home_opened &bull; app_mention &bull; message.im</span>
+                            </div>
+                        </div>
+                        <div class="step-row" style="gap:10px">
+                            <div class="step-num" style="width:32px;height:32px;font-size:13px">7</div>
+                            <div class="step-bar" style="padding:8px 14px">
+                                <span style="font-size:12px;font-weight:600;color:var(--text)">Create slash command</span>
+                                <span style="font-size:10px;color:var(--text2)"><code style="font-family:JetBrains Mono;font-size:9px;color:var(--amber)">/book-desk</code> — no URL needed</span>
+                            </div>
+                        </div>
+                        <div class="step-row" style="gap:10px">
+                            <div class="step-num" style="width:32px;height:32px;font-size:13px">8</div>
+                            <div class="step-bar" style="padding:8px 14px">
+                                <span style="font-size:12px;font-weight:600;color:var(--text)">Copy Signing Secret</span>
+                                <span style="font-size:10px;color:var(--text2)">Settings → Basic Information</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Environment -->
+            <div class="slide compact" data-section="SETUP"><span class="section-tag">Setup</span>
+                <div class="s-section">Step 2 &mdash; Environment</div>
+                <h2 class="s-title" style="font-size:30px">Configure the .env file</h2>
+                <div class="split" style="flex:1;align-items:center;margin-top:6px">
+                    <div class="half" style="display:flex;flex-direction:column;gap:6px;justify-content:center">
+                        <p class="s-body" style="font-size:12px;margin-left:0">Create a <code style="font-family:JetBrains Mono;background:var(--bg2);padding:1px 5px;border-radius:4px">.env</code> file with your Slack tokens:</p>
+                        <div class="code-block" style="flex-shrink:0;font-size:10px;padding:8px 8px">
+                            <span class="comment"># Slack Desk Bot — .env</span>
+                            <br><br>
+                            <span class="key">SLACK_APP_TOKEN</span>=<span class="str">xapp-1-xxxxxxxxxxxx</span>
+                            <br>
+                            <span class="comment"># App-Level Token → Features → Socket Mode</span>
+                            <br><br>
+                            <span class="key">SLACK_BOT_TOKEN</span>=<span class="str">xoxb-xxxxxxxxxxxx</span>
+                            <br>
+                            <span class="comment"># Bot Token → Features → OAuth &amp; Permissions</span>
+                            <br><br>
+                            <span class="key">SLACK_SIGNING_SECRET</span>=<span class="str">xxxxxxxxxxxxxxx</span>
+                            <br>
+                            <span class="comment"># Signing Secret → Settings → Basic Information</span>
+                        </div>
+                    </div>
+                    <div class="half" style="display:flex;flex-direction:column;gap:6px;justify-content:center">
+                        <div class="card card-green" style="padding:8px 14px">
+                            <div class="card-label" style="color:var(--green);font-size:9px"><i class="fa-solid fa-check-circle"></i> Verified</div>
+                            <div class="card-body" style="font-size:11px">A <code style="font-family:JetBrains Mono;font-size:10px;background:var(--bg3);padding:1px 3px;border-radius:3px">.env</code> file already exists.</div>
+                        </div>
+                        <div class="card card-amber" style="padding:8px 14px">
+                            <div class="card-label" style="color:var(--amber);font-size:9px"><i class="fa-solid fa-lightbulb"></i> Token tips</div>
+                            <div style="font-size:10px;color:var(--text2);line-height:1.4">
+                                <div><span class="badge badge-blue" style="font-size:7px;padding:1px 6px">xapp-</span> App token</div>
+                                <div><span class="badge badge-green" style="font-size:7px;padding:1px 6px">xoxb-</span> Bot token</div>
+                                <div style="margin-top:2px">Wrong tokens → <code style="font-family:JetBrains Mono;font-size:8px;color:var(--red)">invalid_auth</code></div>
+                            </div>
+                        </div>
+                        <div class="card card-blue" style="padding:8px 14px">
+                            <div class="card-label" style="color:var(--blue);font-size:9px"><i class="fa-solid fa-file"></i> .env.example</div>
+                            <div class="card-body" style="font-size:11px">Template included — copy &amp; fill.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: Running -->
+            <div class="slide compact" data-section="RUNNING"><span class="section-tag">Running</span>
+                <div class="s-section">Step 3 &mdash; Launch</div>
+                <h2 class="s-title" style="font-size:30px">Install dependencies and run</h2>
+                <div class="split" style="flex:1;align-items:center;margin-top:6px">
+                    <div class="half" style="display:flex;flex-direction:column;gap:6px;justify-content:center">
+                        <div class="code-block" style="flex-shrink:0;font-size:10px;padding:8px 10px">
+                            <span class="comment"># 1. Ensure Python 3.11+</span>
+                            <br>
+                            python3 --version
+                            <br><br>
+                            <span class="comment"># 2. Create virtual environment</span>
+                            <br>
+                            python3 -m venv .venv
+                            <br><br>
+                            <span class="comment"># 3. Install dependencies</span>
+                            <br>
+                            .venv/bin/pip install -e ".[dev]"
+                            <br><br>
+                            <span class="comment"># 4. Run the bot</span>
+                            <br>
+                            .venv/bin/python -m src.app
+                        </div>
+                    </div>
+                    <div class="half" style="display:flex;flex-direction:column;gap:5px;justify-content:center">
+                        <div class="card card-green" style="padding:7px 12px">
+                            <div class="card-label" style="color:var(--green);font-size:9px"><i class="fa-solid fa-terminal"></i> Using Make</div>
+                            <div class="card-body" style="font-size:10px;margin-top:1px;line-height:1.5">
+                                <code style="font-family:JetBrains Mono;font-size:10px;background:var(--bg3);padding:1px 3px;border-radius:3px;color:var(--green)">make run</code> &mdash; starts &nbsp;
+                                <code style="font-family:JetBrains Mono;font-size:10px;background:var(--bg3);padding:1px 3px;border-radius:3px;color:var(--blue)">make test</code> &mdash; tests &nbsp;
+                                <code style="font-family:JetBrains Mono;font-size:10px;background:var(--bg3);padding:1px 3px;border-radius:3px;color:var(--amber)">make migrate</code> &mdash; init DB
+                            </div>
+                        </div>
+                        <div class="card card-amber" style="padding:7px 12px">
+                            <div class="card-label" style="color:var(--amber);font-size:9px"><i class="fa-solid fa-clock"></i> Keep it running (tmux)</div>
+                            <div style="font-size:9px;color:var(--text2);margin-top:1px;line-height:1.4">
+                                <code style="font-family:JetBrains Mono;font-size:9px;background:var(--bg3);padding:1px 3px;border-radius:3px;color:var(--amber)">tmux new-session -d -s slack-bot '.venv/bin/python -m src.app'</code>
+                                <div style="margin-top:2px">Logs: <code style="font-family:JetBrains Mono;font-size:9px;background:var(--bg3);padding:1px 3px;border-radius:3px">tmux capture-pane -t slack-bot -p</code></div>
+                                <div>Stop: <code style="font-family:JetBrains Mono;font-size:9px;background:var(--bg3);padding:1px 3px;border-radius:3px">tmux kill-session -t slack-bot</code></div>
+                            </div>
+                        </div>
+                        <div class="card card-blue" style="padding:7px 12px">
+                            <div class="card-label" style="color:var(--blue);font-size:9px"><i class="fa-solid fa-circle-info"></i> Expected output</div>
+                            <div style="font-size:10px;margin-top:1px;line-height:1.4">
+                                <div style="color:var(--green)">✓ Bolt app is running!</div>
+                                <div style="color:var(--text2)">✓ A new session has been established</div>
+                                <div style="color:var(--text2)">✓ Starting to receive messages</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: Verify It Works -->
+            <div class="slide" data-section="RUNNING"><span class="section-tag">Running</span>
+                <div class="s-section">Step 4 &mdash; Verify</div>
+                <h2 class="s-title" style="font-size:38px">Check the bot is live</h2>
+                <div class="split" style="flex:1;align-items:center;margin-top:16px">
+                    <div class="half" style="display:flex;flex-direction:column;gap:14px;justify-content:center">
+                        <div class="card card-green" style="padding:18px 22px">
+                            <div class="step-row">
+                                <div style="width:40px;height:40px;border-radius:8px;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--green30)">
+                                    <span style="font-size:16px;font-weight:900;color:var(--green)">1</span>
+                                </div>
+                                <div style="flex:1;padding-left:10px">
+                                    <div style="font-size:15px;font-weight:700;color:var(--text)">Open Slack App Home</div>
+                                    <div style="font-size:12px;color:var(--text2);margin-top:2px">In Slack, click the app name in the left sidebar</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-blue" style="padding:18px 22px">
+                            <div class="step-row">
+                                <div style="width:40px;height:40px;border-radius:8px;background:rgba(10,132,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--blue30)">
+                                    <span style="font-size:16px;font-weight:900;color:var(--blue)">2</span>
+                                </div>
+                                <div style="flex:1;padding-left:10px">
+                                    <div style="font-size:15px;font-weight:700;color:var(--text)">See the home tab</div>
+                                    <div style="font-size:12px;color:var(--text2);margin-top:2px">Welcome text, upcoming bookings, and occupancy bars</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-amber" style="padding:18px 22px">
+                            <div class="step-row">
+                                <div style="width:40px;height:40px;border-radius:8px;background:rgba(245,158,11,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--amber30)">
+                                    <span style="font-size:16px;font-weight:900;color:var(--amber)">3</span>
+                                </div>
+                                <div style="flex:1;padding-left:10px">
+                                    <div style="font-size:15px;font-weight:700;color:var(--text)">Test slash command</div>
+                                    <div style="font-size:12px;color:var(--text2);margin-top:2px">Type <code style="font-family:JetBrains Mono;font-size:11px;background:var(--bg3);padding:1px 4px;border-radius:3px;color:var(--amber)">/book-desk</code> in any channel</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-red" style="padding:18px 22px">
+                            <div class="step-row">
+                                <div style="width:40px;height:40px;border-radius:8px;background:rgba(239,68,68,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--red30)">
+                                    <span style="font-size:16px;font-weight:900;color:var(--red)">4</span>
+                                </div>
+                                <div style="flex:1;padding-left:10px">
+                                    <div style="font-size:15px;font-weight:700;color:var(--text)">Say "hello"</div>
+                                    <div style="font-size:12px;color:var(--text2);margin-top:2px">DM the bot "hello" — it should reply</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:8px;margin-top:4px">
+                            <div style="flex:1;padding:8px 14px;background:var(--bg2);border-radius:8px;border:1px solid var(--blue15);text-align:center">
+                                <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--blue)">Need to restart?</div>
+                                <div style="font-size:12px;color:var(--text2);margin-top:2px;font-family:JetBrains Mono">tmux kill-session -t slack-bot &amp;&amp; tmux new ...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="half diagram"><svg viewBox="0 0 460 340">
+                            <!-- Verification steps diagram -->
+                            <rect x="40" y="8" width="380" height="52" rx="10" fill="var(--bg2)" stroke="var(--green)" stroke-width="2" />
+                            <text x="230" y="28" fill="var(--green)" font-size="11" font-family="Source Sans 3" font-weight="800" text-anchor="middle">1. Open the App Home tab</text>
+                            <text x="230" y="46" fill="var(--text2)" font-size="9" font-family="Source Sans 3" text-anchor="middle">Click app in Slack sidebar → Home tab loads</text>
+
+                            <line x1="230" y1="60" x2="230" y2="78" stroke="var(--green)" stroke-width="2" marker-end="url(#arrowGreen)" />
+
+                            <rect x="40" y="80" width="380" height="52" rx="10" fill="var(--bg2)" stroke="var(--blue)" stroke-width="2" />
+                            <text x="230" y="100" fill="var(--blue)" font-size="11" font-family="Source Sans 3" font-weight="800" text-anchor="middle">2. Home view is published</text>
+                            <text x="230" y="118" fill="var(--text2)" font-size="9" font-family="Source Sans 3" text-anchor="middle">Welcome message + occupancy bars visible</text>
+
+                            <line x1="230" y1="132" x2="230" y2="150" stroke="var(--blue)" stroke-width="2" marker-end="url(#arrowBlue)" />
+
+                            <rect x="40" y="152" width="380" height="52" rx="10" fill="var(--bg2)" stroke="var(--amber)" stroke-width="2" />
+                            <text x="230" y="172" fill="var(--amber)" font-size="11" font-family="Source Sans 3" font-weight="800" text-anchor="middle">3. Use /book-desk command</text>
+                            <text x="230" y="190" fill="var(--text2)" font-size="9" font-family="Source Sans 3" text-anchor="middle">Slash command opens a booking modal</text>
+
+                            <line x1="230" y1="204" x2="230" y2="222" stroke="var(--amber)" stroke-width="2" marker-end="url(#arrowAmber)" />
+
+                            <rect x="40" y="224" width="380" height="52" rx="10" fill="var(--bg2)" stroke="var(--green)" stroke-width="2" />
+                            <text x="230" y="244" fill="var(--green)" font-size="11" font-family="Source Sans 3" font-weight="800" text-anchor="middle">4. Bot responds to messages</text>
+                            <text x="230" y="262" fill="var(--text2)" font-size="9" font-family="Source Sans 3" text-anchor="middle">DM "hello" → bot replies "Hello &lt;@you&gt;!"</text>
+
+                            <!-- Check mark at bottom -->
+                            <rect x="130" y="302" width="200" height="30" rx="20" fill="rgba(34,197,94,0.1)" stroke="var(--green30)" stroke-width="1" />
+                            <text x="230" y="320" fill="var(--green)" font-size="11" font-family="Source Sans 3" font-weight="800" text-anchor="middle" dominant-baseline="central">✓ All working</text>
+                        </svg></div>
+                </div>
+            </div>
+
+            <!-- Slide 8: Troubleshooting -->
+            <div class="slide" data-section="TROUBLESHOOT"><span class="section-tag">Troubleshoot</span>
+                <div class="s-section">Common Issues</div>
+                <h2 class="s-title" style="font-size:38px">Troubleshooting</h2>
+                <div class="split" style="flex:1;align-items:center;margin-top:8px">
+                    <div class="half" style="display:flex;flex-direction:column;gap:8px;justify-content:center">
+                        <div class="card card-red" style="padding:12px 18px;display:flex;gap:12px;align-items:flex-start">
+                            <div style="flex-shrink:0;margin-top:2px"><i class="fa-solid fa-circle-exclamation" style="color:var(--red);font-size:14px"></i></div>
+                            <div>
+                                <div style="font-size:14px;font-weight:700;color:var(--red)">not_enabled</div>
+                                <div style="font-size:12px;color:var(--text2);margin-top:2px">App Home tab is not enabled. Go to <strong>Features → App Home</strong> and toggle <strong>"Always Show My Bot's Tabs"</strong> ON. Then reinstall the app.</div>
+                            </div>
+                        </div>
+                        <div class="card card-red" style="padding:12px 18px;display:flex;gap:12px;align-items:flex-start">
+                            <div style="flex-shrink:0;margin-top:2px"><i class="fa-solid fa-circle-exclamation" style="color:var(--red);font-size:14px"></i></div>
+                            <div>
+                                <div style="font-size:14px;font-weight:700;color:var(--red)">invalid_auth / not_authed</div>
+                                <div style="font-size:12px;color:var(--text2);margin-top:2px">Token is wrong or the app was uninstalled. Double-check the <code style="font-family:JetBrains Mono;font-size:10px;background:var(--bg3);padding:1px 4px;border-radius:3px">.env</code> file and reinstall from OAuth &amp; Permissions.</div>
+                            </div>
+                        </div>
+                        <div class="card card-red" style="padding:12px 18px;display:flex;gap:12px;align-items:flex-start">
+                            <div style="flex-shrink:0;margin-top:2px"><i class="fa-solid fa-circle-exclamation" style="color:var(--red);font-size:14px"></i></div>
+                            <div>
+                                <div style="font-size:14px;font-weight:700;color:var(--red)">Home page blank</div>
+                                <div style="font-size:12px;color:var(--text2);margin-top:2px">Check bot logs for <code style="font-family:JetBrains Mono;font-size:10px;background:var(--bg3);padding:1px 4px;border-radius:3px">not_enabled</code>. If not, the <code style="font-family:JetBrains Mono;font-size:10px;background:var(--bg3);padding:1px 4px;border-radius:3px">tab</code> filter might be blocking it (fixed in the current code).</div>
+                            </div>
+                        </div>
+                        <div class="card card-red" style="padding:12px 18px;display:flex;gap:12px;align-items:flex-start">
+                            <div style="flex-shrink:0;margin-top:2px"><i class="fa-solid fa-circle-exclamation" style="color:var(--red);font-size:14px"></i></div>
+                            <div>
+                                <div style="font-size:14px;font-weight:700;color:var(--red)">Connection reset by peer</div>
+                                <div style="font-size:12px;color:var(--text2);margin-top:2px">Socket Mode connection dropped. The SDK auto-reconnects, but check network stability and that the app-level token has <code style="font-family:JetBrains Mono;font-size:10px">connections:write</code> scope.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="half" style="display:flex;flex-direction:column;gap:8px;justify-content:center">
+                        <div class="card card-amber" style="padding:12px 18px;display:flex;gap:12px;align-items:flex-start">
+                            <div style="flex-shrink:0;margin-top:2px"><i class="fa-solid fa-triangle-exclamation" style="color:var(--amber);font-size:14px"></i></div>
+                            <div>
+                                <div style="font-size:14px;font-weight:700;color:var(--amber)">Need to reinstall the app?</div>
+                                <div style="font-size:12px;color:var(--text2);margin-top:2px">After changing scopes or settings, go to <strong>OAuth &amp; Permissions</strong> → "Reinstall to Workspace". Tokens may change — update .env if so.</div>
+                            </div>
+                        </div>
+                        <div class="card card-amber" style="padding:12px 18px;display:flex;gap:12px;align-items:flex-start">
+                            <div style="flex-shrink:0;margin-top:2px"><i class="fa-solid fa-triangle-exclamation" style="color:var(--amber);font-size:14px"></i></div>
+                            <div>
+                                <div style="font-size:14px;font-weight:700;color:var(--amber)">Virtual environment issues</div>
+                                <div style="font-size:12px;color:var(--text2);margin-top:2px">If <code style="font-family:JetBrains Mono;font-size:10px">pip</code> is missing: run <code style="font-family:JetBrains Mono;font-size:10px">python3 -m venv .venv --without-pip</code> then <code style="font-family:JetBrains Mono;font-size:10px">python3 /tmp/get-pip.py</code>.</div>
+                            </div>
+                        </div>
+                        <div class="card card-blue" style="padding:12px 18px;display:flex;gap:12px;align-items:flex-start">
+                            <div style="flex-shrink:0;margin-top:2px"><i class="fa-solid fa-book" style="color:var(--blue);font-size:14px"></i></div>
+                            <div>
+                                <div style="font-size:14px;font-weight:700;color:var(--blue)">Quick reference</div>
+                                <div style="font-size:12px;color:var(--text2);margin-top:2px;line-height:1.8">
+                                    <code style="font-family:JetBrains Mono;font-size:11px;background:var(--bg3);padding:1px 4px;border-radius:3px;display:inline-block;margin-bottom:2px">SLACK_SETTINGS.txt</code> — full settings guide<br>
+                                    <code style="font-family:JetBrains Mono;font-size:11px;background:var(--bg3);padding:1px 4px;border-radius:3px">make run</code> — start the bot<br>
+                                    <code style="font-family:JetBrains Mono;font-size:11px;background:var(--bg3);padding:1px 4px;border-radius:3px">make test</code> — run tests<br>
+                                    <code style="font-family:JetBrains Mono;font-size:11px;background:var(--bg3);padding:1px 4px;border-radius:3px">tmux capture-pane -t slack-bot -p</code> — check logs
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end deck-wrapper -->
+
+        <div id="progress"></div>
+        <div id="controls">
+            <i class="fa-solid fa-calendar-check" style="color:var(--blue);font-size:16px;opacity:0.8"></i>
+            <span style="width:1px;height:16px;background:rgba(255,255,255,0.1);display:block"></span>
+            <span id="section-label">SLACK DESK BOT</span>
+            <button id="btn-prev" title="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
+            <span id="slide-counter">1 / 8</span>
+            <button id="btn-next" title="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
+            <button id="download-btn" title="Download this deck"><i class="fa-solid fa-download"></i></button>
+            <button id="fullscreen-btn" title="Toggle fullscreen"><i class="fa-solid fa-expand"></i></button>
+        </div>
+    </div><!-- end app -->
+
+    <script>
+        (function ()
+        {
+            const slides = document.querySelectorAll('.slide');
+            const total = slides.length;
+            let current = 0;
+
+            const counter = document.getElementById('slide-counter');
+            const progress = document.getElementById('progress');
+            const sectionLabel = document.getElementById('section-label');
+
+            function goTo(n)
+            {
+                if(n < 0 || n >= total) return;
+                slides[current].classList.remove('active');
+                current = n;
+                slides[current].classList.add('active');
+                counter.textContent = (current + 1) + ' / ' + total;
+                progress.style.width = ((current + 1) / total * 100) + '%';
+                const sec = slides[current].getAttribute('data-section') || '';
+                sectionLabel.textContent = sec;
+                try {localStorage.setItem('slide', current);} catch(e) {}
+                history.replaceState(null, '', '#' + (current + 1));
+            }
+
+            document.getElementById('btn-prev').addEventListener('click', function () {goTo(current - 1);});
+            document.getElementById('btn-next').addEventListener('click', function () {goTo(current + 1);});
+
+            document.addEventListener('keydown', function (e)
+            {
+                if(e.key === 'ArrowRight' || e.key === ' ') {e.preventDefault(); goTo(current + 1);}
+                else if(e.key === 'ArrowLeft') {e.preventDefault(); goTo(current - 1);}
+                else if(e.key === 'Home') {e.preventDefault(); goTo(0);}
+                else if(e.key === 'End') {e.preventDefault(); goTo(total - 1);}
+            });
+
+            // Touch navigation
+            let touchStartX = 0;
+            document.addEventListener('touchstart', function (e) {touchStartX = e.changedTouches[0].screenX;});
+            document.addEventListener('touchend', function (e)
+            {
+                const diff = e.changedTouches[0].screenX - touchStartX;
+                if(Math.abs(diff) > 50) {diff < 0 ? goTo(current + 1) : goTo(current - 1);}
+            });
+
+            // Scale deck to fill viewport
+            function resize()
+            {
+                const wrapper = document.getElementById('deck-wrapper');
+                const scaleX = window.innerWidth / 1280;
+                const scaleY = window.innerHeight / 720;
+                const scale = Math.min(scaleX, scaleY);
+                wrapper.style.transform = 'scale(' + scale + ')';
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Download button
+            document.getElementById('download-btn').addEventListener('click', function ()
+            {
+                var a = document.createElement('a');
+                a.href = window.location.href;
+                a.download = 'slides.html';
+                a.click();
+            });
+
+            // Fullscreen toggle
+            document.getElementById('fullscreen-btn').addEventListener('click', function ()
+            {
+                if(!document.fullscreenElement)
+                {
+                    document.documentElement.requestFullscreen().then(resize);
+                } else
+                {
+                    document.exitFullscreen().then(resize);
+                }
+            });
+            document.addEventListener('fullscreenchange', function ()
+            {
+                var icon = document.querySelector('#fullscreen-btn i');
+                if(document.fullscreenElement)
+                {
+                    icon.className = 'fa-solid fa-compress';
+                } else
+                {
+                    icon.className = 'fa-solid fa-expand';
+                }
+                setTimeout(resize, 100);
+            });
+
+            // Fix slide numbers and inject watermark logo
+            slides.forEach(function (s, i)
+            {
+                var num = s.querySelector('.slide-number');
+                if(num) num.textContent = String(i + 1).padStart(2, '0') + ' / ' + total;
+            });
+
+            // Restore slide from URL hash or localStorage
+            var start = 0;
+            var hash = parseInt(location.hash.replace('#', ''), 10);
+            if(hash >= 1 && hash <= total) {start = hash - 1;}
+            else {try {var saved = parseInt(localStorage.getItem('slide'), 10); if(saved >= 0 && saved < total) start = saved;} catch(e) {} }
+            goTo(start);
+        })();
+    </script>
+</body>
+
+</html>
