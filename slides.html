@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slack Desk Bot — Presentation</title>
+    <title>Git & OpenCode — Stage Cubbit</title>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
         rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -71,7 +71,7 @@
             overflow: hidden;
             display: none;
             flex-direction: column;
-            padding: 56px 64px
+            padding: 60px 72px
         }
 
         .slide.active {
@@ -167,6 +167,15 @@
             z-index: 1
         }
 
+        .grid-2x2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+            position: relative;
+            z-index: 1
+        }
+
         .card {
             background: var(--bg2);
             border: 1px solid rgba(10, 132, 255, 0.15);
@@ -230,11 +239,66 @@
             max-height: 100%
         }
 
+        .node {
+            fill: var(--bg2);
+            stroke: var(--blue30);
+            stroke-width: 1.5
+        }
+
+        .node-text {
+            fill: var(--text);
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            text-anchor: middle;
+            dominant-baseline: central
+        }
+
+        .node-text-sm {
+            fill: var(--text2);
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 9px;
+            font-weight: 400;
+            text-anchor: middle;
+            dominant-baseline: central
+        }
+
+        .arrow-line {
+            stroke: var(--blue30);
+            stroke-width: 1.5;
+            fill: none;
+            marker-end: url(#arrowBlue)
+        }
+
+        .arrow-line-green {
+            stroke: var(--green30);
+            stroke-width: 1.5;
+            fill: none;
+            marker-end: url(#arrowGreen)
+        }
+
+        .arrow-line-red {
+            stroke: var(--red30);
+            stroke-width: 1.5;
+            fill: none;
+            marker-end: url(#arrowRed)
+        }
+
+        .icon-check {
+            color: var(--green);
+            font-size: 24px
+        }
+
+        .icon-x {
+            color: var(--red);
+            font-size: 24px
+        }
+
         .code-block {
             background: #0D1117;
             border: 1px solid rgba(10, 132, 255, 0.15);
             border-radius: var(--radius);
-            padding: 14px 18px;
+            padding: 20px 24px;
             font-family: 'JetBrains Mono', monospace;
             font-size: 13px;
             line-height: 1.7;
@@ -257,8 +321,8 @@
             color: var(--amber)
         }
 
-        .code-block .comment {
-            color: var(--text3)
+        .code-block .bracket {
+            color: var(--text2)
         }
 
         #progress {
@@ -359,6 +423,7 @@
                 opacity: 0;
                 transform: translateY(16px)
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0)
@@ -381,31 +446,6 @@
             animation-delay: 0.18s
         }
 
-        .slide.compact {
-            padding: 18px 28px 18px 0
-        }
-
-        .slide.compact .split {
-            gap: 6px
-        }
-
-        .slide.compact .half .code-block {
-            padding: 8px 8px
-        }
-
-        .slide.compact .half .card {
-            padding: 7px 10px
-        }
-
-        .slide.compact .step-bar {
-            justify-content: flex-start;
-            gap: 8px
-        }
-
-        .slide.compact .step-bar span:last-child {
-            margin-left: auto
-        }
-
         .slide-number {
             position: absolute;
             top: 24px;
@@ -416,6 +456,7 @@
             letter-spacing: 0.1em;
             z-index: 2
         }
+
 
         .section-tag {
             position: absolute;
@@ -433,36 +474,36 @@
             display: none
         }
 
-        .step-row {
-            display: flex;
-            align-items: center;
-            gap: 16px
-        }
-
-        .step-num {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            border: 1px solid var(--blue30);
-            background: rgba(10, 132, 255, 0.1);
+        .large-quote {
+            font-size: 64px;
             font-weight: 900;
             color: var(--blue);
-            font-size: 16px
+            text-align: center;
+            letter-spacing: -0.03em;
+            line-height: 1.1
         }
 
-        .step-bar {
-            flex: 1;
-            padding: 14px 20px;
-            background: var(--bg2);
-            border: 1px solid rgba(10, 132, 255, 0.1);
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center
+        .quote-sub {
+            font-size: 18px;
+            color: var(--text2);
+            text-align: center;
+            margin-top: 16px;
+            font-weight: 400
+        }
+
+        .metric-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--text)
+        }
+
+        .metric-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 4px
         }
 
         .badge {
@@ -500,12 +541,39 @@
             border: 1px solid rgba(245, 158, 11, 0.2)
         }
 
-        .code-line {
+        .step-row {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 4px 0
+            gap: 16px
         }
+
+        .step-num {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid var(--blue30);
+            background: rgba(10, 132, 255, 0.1);
+            font-weight: 900;
+            color: var(--blue);
+            font-size: 16px
+        }
+
+        .step-bar {
+            flex: 1;
+            padding: 14px 20px;
+            background: var(--bg2);
+            border: 1px solid rgba(10, 132, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        /* Scaling handled dynamically by JS resize() */
     </style>
 </head>
 
@@ -539,463 +607,348 @@
         <div id="deck-wrapper">
 
             <!-- Slide 1: Title -->
-            <div class="slide centered active" data-section="SLACK DESK BOT">
+            <div class="slide centered active" data-section="GIT & OPENCODE">
                 <div class="glow-center"></div>
-                <div style="width:72px;height:72px;border-radius:16px;background:rgba(10,132,255,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:24px;position:relative;z-index:1;border:1px solid var(--blue30)">
-                    <i class="fa-solid fa-calendar-check" style="font-size:32px;color:var(--blue)"></i>
-                </div>
-                <h1 class="s-title" style="font-size:56px">Slack Desk Bot</h1>
-                <p class="s-subtitle" style="font-size:22px;margin-top:20px">Internal desk &amp; room booking bot for Slack</p>
-                <div style="display:flex;gap:12px;margin-top:36px;position:relative;z-index:1">
-                    <span class="badge badge-blue">Python</span>
-                    <span class="badge badge-green">Slack Bolt SDK</span>
-                    <span class="badge badge-amber">Socket Mode</span>
-                    <span class="badge badge-blue">SQLite</span>
-                </div>
+                <img src="https://cdn.prod.website-files.com/67a4c547ac46cdf433fcc313/67b4539996b1d9ec315a12c7_logo-footer.svg" alt="Cubbit" style="height:32px;margin-bottom:24px;position:relative;z-index:1;opacity:0.9">
+                <h1 class="s-title" style="font-size:56px">Git &amp; OpenCode</h1>
+                <p class="s-subtitle" style="font-size:22px;margin-top:20px">First steps in version control and AI-assisted development</p>
             </div>
 
-            <!-- Slide 2: What It Does -->
-            <div class="slide" data-section="PROJECT"><span class="section-tag">Project</span>
-                <div class="s-section">Overview</div>
-                <h2 class="s-title" style="font-size:38px">What the bot does</h2>
-                <div class="cols-3" style="flex:1;align-content:center;padding-top:16px">
-                    <div class="card card-blue" style="padding:28px 24px;display:flex;flex-direction:column;align-items:center;text-align:center">
-                        <div style="width:52px;height:52px;border-radius:14px;background:rgba(10,132,255,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:14px;border:1px solid var(--blue30)">
-                            <i class="fa-solid fa-desk" style="font-size:22px;color:var(--blue)"></i>
-                        </div>
-                        <div class="card-title" style="font-size:17px">Desk Booking</div>
-                        <div class="card-body" style="margin-top:6px">Book an available desk in any office via slash command or the home tab</div>
-                    </div>
-                    <div class="card card-green" style="padding:28px 24px;display:flex;flex-direction:column;align-items:center;text-align:center">
-                        <div style="width:52px;height:52px;border-radius:14px;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:14px;border:1px solid var(--green30)">
-                            <i class="fa-solid fa-door-open" style="font-size:22px;color:var(--green)"></i>
-                        </div>
-                        <div class="card-title" style="font-size:17px">Room Booking</div>
-                        <div class="card-body" style="margin-top:6px">Reserve meeting rooms across 2&ndash;3 offices with time-slot validation</div>
-                    </div>
-                    <div class="card card-amber" style="padding:28px 24px;display:flex;flex-direction:column;align-items:center;text-align:center">
-                        <div style="width:52px;height:52px;border-radius:14px;background:rgba(245,158,11,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:14px;border:1px solid var(--amber30)">
-                            <i class="fa-solid fa-chart-simple" style="font-size:22px;color:var(--amber)"></i>
-                        </div>
-                        <div class="card-title" style="font-size:17px">Occupancy View</div>
-                        <div class="card-body" style="margin-top:6px">See live occupancy bars per office on the Slack App Home tab</div>
-                    </div>
-                </div>
-                <div style="margin-top:12px;display:flex;gap:12px;align-items:center;justify-content:center;z-index:1;position:relative">
-                    <div class="card" style="padding:12px 18px;display:flex;align-items:center;gap:10px">
-                        <i class="fa-solid fa-database" style="color:var(--blue);font-size:14px"></i>
-                        <span style="font-size:13px;color:var(--text2)">SQLite (WAL mode) &mdash; no external DB needed</span>
-                    </div>
-                    <div class="card" style="padding:12px 18px;display:flex;align-items:center;gap:10px">
-                        <i class="fa-solid fa-bolt" style="color:var(--green);font-size:14px"></i>
-                        <span style="font-size:13px;color:var(--text2)">Socket Mode &mdash; no public HTTP endpoint</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 3: Stack -->
-            <div class="slide" data-section="PROJECT"><span class="section-tag">Project</span>
-                <div class="s-section">Architecture</div>
-                <h2 class="s-title" style="font-size:38px">Tech stack</h2>
-                <div class="split" style="flex:1;align-items:center;margin-top:12px">
-                    <div class="half" style="display:flex;flex-direction:column;gap:14px;justify-content:center">
-                        <div class="card card-blue" style="padding:18px 20px;display:flex;align-items:center;gap:16px">
-                            <div style="width:44px;height:44px;border-radius:12px;background:rgba(10,132,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--blue30)">
-                                <i class="fa-brands fa-python" style="font-size:22px;color:var(--blue)"></i>
-                            </div>
-                            <div>
-                                <div class="card-title" style="font-size:15px;margin-bottom:2px">Python 3.11+</div>
-                                <div class="card-body" style="font-size:12px">Core language with strict typing (mypy strict mode)</div>
-                            </div>
-                        </div>
-                        <div class="card card-green" style="padding:18px 20px;display:flex;align-items:center;gap:16px">
-                            <div style="width:44px;height:44px;border-radius:12px;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--green30)">
-                                <i class="fa-solid fa-slack" style="font-size:22px;color:var(--green)"></i>
-                            </div>
-                            <div>
-                                <div class="card-title" style="font-size:15px;margin-bottom:2px">Slack Bolt SDK</div>
-                                <div class="card-body" style="font-size:12px">Socket Mode adapter &mdash; no web server required</div>
-                            </div>
-                        </div>
-                        <div class="card card-amber" style="padding:18px 20px;display:flex;align-items:center;gap:16px">
-                            <div style="width:44px;height:44px;border-radius:12px;background:rgba(245,158,11,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--amber30)">
-                                <i class="fa-solid fa-database" style="font-size:22px;color:var(--amber)"></i>
-                            </div>
-                            <div>
-                                <div class="card-title" style="font-size:15px;margin-bottom:2px">SQLite (WAL mode)</div>
-                                <div class="card-body" style="font-size:12px">Local database, zero configuration, concurrent reads</div>
-                            </div>
-                        </div>
-                        <div class="card card-red" style="padding:18px 20px;display:flex;align-items:center;gap:16px">
-                            <div style="width:44px;height:44px;border-radius:12px;background:rgba(239,68,68,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--red30)">
-                                <i class="fa-solid fa-clock" style="font-size:22px;color:var(--red)"></i>
-                            </div>
-                            <div>
-                                <div class="card-title" style="font-size:15px;margin-bottom:2px">APScheduler</div>
-                                <div class="card-body" style="font-size:12px">Scheduled cleanups and reminders</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="half diagram"><svg viewBox="0 0 460 340">
-                            <!-- Flow diagram -->
-                            <rect x="100" y="10" width="260" height="44" rx="8" fill="var(--bg2)" stroke="var(--blue)" stroke-width="1.5" />
-                            <text x="230" y="32" fill="var(--blue)" font-size="11" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Slack App (Socket Mode)</text>
-                            <text x="230" y="46" fill="var(--text3)" font-size="8" font-family="Source Sans 3" text-anchor="middle">WebSocket connection</text>
-
-                            <line x1="230" y1="54" x2="230" y2="80" stroke="var(--blue)" stroke-width="1.5" marker-end="url(#arrowBlue)" />
-
-                            <rect x="80" y="83" width="300" height="44" rx="8" fill="var(--bg2)" stroke="var(--green)" stroke-width="1.5" />
-                            <text x="230" y="105" fill="var(--green)" font-size="11" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Slack Bolt App (slack_bolt.App)</text>
-                            <text x="230" y="119" fill="var(--text3)" font-size="8" font-family="Source Sans 3" text-anchor="middle">Event handlers &bull; Slash commands &bull; Views</text>
-
-                            <line x1="150" y1="127" x2="150" y2="153" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arrowAmber)" />
-                            <line x1="310" y1="127" x2="310" y2="153" stroke="var(--green)" stroke-width="1.5" marker-end="url(#arrowGreen)" />
-
-                            <rect x="75" y="156" width="150" height="44" rx="8" fill="var(--bg2)" stroke="var(--amber)" stroke-width="1.5" />
-                            <text x="150" y="178" fill="var(--amber)" font-size="11" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Business Logic</text>
-                            <text x="150" y="192" fill="var(--text3)" font-size="8" font-family="Source Sans 3" text-anchor="middle">Services &bull; Repositories</text>
-
-                            <rect x="235" y="156" width="150" height="44" rx="8" fill="var(--bg2)" stroke="var(--green)" stroke-width="1.5" />
-                            <text x="310" y="178" fill="var(--green)" font-size="11" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">SQLite Database</text>
-                            <text x="310" y="192" fill="var(--text3)" font-size="8" font-family="Source Sans 3" text-anchor="middle">data/desk_bot.db (WAL mode)</text>
-
-                            <line x1="150" y1="200" x2="230" y2="226" stroke="var(--amber)" stroke-width="1" />
-                            <line x1="310" y1="200" x2="230" y2="226" stroke="var(--green)" stroke-width="1" />
-
-                            <rect x="80" y="229" width="300" height="44" rx="8" fill="var(--bg2)" stroke="var(--blue)" stroke-width="1.5" />
-                            <text x="230" y="251" fill="var(--blue)" font-size="11" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Slack Home Tab &amp; Responses</text>
-                            <text x="230" y="265" fill="var(--text3)" font-size="8" font-family="Source Sans 3" text-anchor="middle">views.publish &bull; chat.postMessage &bull; modals</text>
-
-                            <!-- Badge -->
-                            <rect x="40" y="310" width="380" height="28" rx="6" fill="var(--bg2)" stroke="var(--blue15)" stroke-width="0.5" />
-                            <text x="230" y="324" fill="var(--text2)" font-size="8" font-family="Source Sans 3" font-weight="600" text-anchor="middle" dominant-baseline="central">Python 3.11+ &bull; Slack Bolt SDK &bull; SQLite &bull; APScheduler</text>
-                        </svg></div>
-                </div>
-            </div>
-
-            <!-- Slide 4: Slack App Settings -->
-            <div class="slide compact" data-section="SETUP"><span class="section-tag">Setup</span>
-                <div class="s-section">Step 1 &mdash; Slack App</div>
-                <h2 class="s-title" style="font-size:30px">Create and configure the Slack App</h2>
-                <div class="split" style="flex:1;align-items:center;margin-top:6px">
-                    <div class="half" style="display:flex;flex-direction:column;gap:5px;justify-content:center">
-                        <div class="step-row" style="gap:10px">
-                            <div class="step-num" style="width:32px;height:32px;font-size:13px">1</div>
-                            <div class="step-bar" style="padding:8px 14px">
-                                <span style="font-size:12px;font-weight:600;color:var(--text)">Create app</span>
-                                <span style="font-size:10px;color:var(--text2)">api.slack.com/apps → "From scratch"</span>
-                            </div>
-                        </div>
-                        <div class="step-row" style="gap:10px">
-                            <div class="step-num" style="width:32px;height:32px;font-size:13px">2</div>
-                            <div class="step-bar" style="padding:8px 14px">
-                                <span style="font-size:12px;font-weight:600;color:var(--text)">Enable Socket Mode</span>
-                                <span style="font-size:10px;color:var(--text2)">Socket Mode → ON (get xapp- token)</span>
-                            </div>
-                        </div>
-                        <div class="step-row" style="gap:10px">
-                            <div class="step-num" style="width:32px;height:32px;font-size:13px">3</div>
-                            <div class="step-bar" style="padding:8px 14px">
-                                <span style="font-size:12px;font-weight:600;color:var(--text)">Set Bot Token Scopes</span>
-                                <span style="font-size:10px;color:var(--text2)">OAuth &amp; Permissions → add scopes</span>
-                            </div>
-                        </div>
-                        <div class="card card-amber" style="padding:8px 14px;font-size:10px;line-height:1.5;margin-left:42px">
-                            <span style="color:var(--amber);font-weight:700">Required scopes:</span>
-                            <code style="font-family:JetBrains Mono;font-size:9px;color:var(--text2)">
-                                app_mentions:read &bull; channels:history &bull; chat:write<br>
-                                commands &bull; users:read &bull; reactions:read/write
-                            </code>
-                        </div>
-                        <div class="step-row" style="gap:10px">
-                            <div class="step-num" style="width:32px;height:32px;font-size:13px">4</div>
-                            <div class="step-bar" style="padding:8px 14px">
-                                <span style="font-size:12px;font-weight:600;color:var(--text)">Install to workspace</span>
-                                <span style="font-size:10px;color:var(--text2)">Get the xoxb- bot token</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="half" style="display:flex;flex-direction:column;gap:5px;justify-content:center">
-                        <div class="step-row" style="gap:10px">
-                            <div class="step-num" style="width:32px;height:32px;font-size:13px;border-color:var(--green30);background:rgba(34,197,94,0.1);color:var(--green)">5</div>
-                            <div class="step-bar" style="padding:8px 14px;border-color:var(--green30)">
-                                <span style="font-size:12px;font-weight:600;color:var(--text)">Enable App Home tab</span>
-                                <span style="font-size:10px;color:var(--text2)">App Home → toggle ON</span>
-                            </div>
-                        </div>
-                        <div class="card card-green" style="padding:6px 14px;font-size:10px;margin-left:42px;border-style:dashed">
-                            <i class="fa-solid fa-circle-exclamation" style="color:var(--green)"></i>
-                            <span style="color:var(--text2)"> Without this → <code style="font-family:JetBrains Mono;font-size:9px;color:var(--red)">not_enabled</code></span>
-                        </div>
-                        <div class="step-row" style="gap:10px">
-                            <div class="step-num" style="width:32px;height:32px;font-size:13px">6</div>
-                            <div class="step-bar" style="padding:8px 14px">
-                                <span style="font-size:12px;font-weight:600;color:var(--text)">Subscribe to events</span>
-                                <span style="font-size:10px;color:var(--text2)">app_home_opened &bull; app_mention &bull; message.im</span>
-                            </div>
-                        </div>
-                        <div class="step-row" style="gap:10px">
-                            <div class="step-num" style="width:32px;height:32px;font-size:13px">7</div>
-                            <div class="step-bar" style="padding:8px 14px">
-                                <span style="font-size:12px;font-weight:600;color:var(--text)">Create slash command</span>
-                                <span style="font-size:10px;color:var(--text2)"><code style="font-family:JetBrains Mono;font-size:9px;color:var(--amber)">/book-desk</code> — no URL needed</span>
-                            </div>
-                        </div>
-                        <div class="step-row" style="gap:10px">
-                            <div class="step-num" style="width:32px;height:32px;font-size:13px">8</div>
-                            <div class="step-bar" style="padding:8px 14px">
-                                <span style="font-size:12px;font-weight:600;color:var(--text)">Copy Signing Secret</span>
-                                <span style="font-size:10px;color:var(--text2)">Settings → Basic Information</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 5: Environment -->
-            <div class="slide compact" data-section="SETUP"><span class="section-tag">Setup</span>
-                <div class="s-section">Step 2 &mdash; Environment</div>
-                <h2 class="s-title" style="font-size:30px">Configure the .env file</h2>
-                <div class="split" style="flex:1;align-items:center;margin-top:6px">
-                    <div class="half" style="display:flex;flex-direction:column;gap:6px;justify-content:center">
-                        <p class="s-body" style="font-size:12px;margin-left:0">Create a <code style="font-family:JetBrains Mono;background:var(--bg2);padding:1px 5px;border-radius:4px">.env</code> file with your Slack tokens:</p>
-                        <div class="code-block" style="flex-shrink:0;font-size:10px;padding:8px 8px">
-                            <span class="comment"># Slack Desk Bot — .env</span>
-                            <br><br>
-                            <span class="key">SLACK_APP_TOKEN</span>=<span class="str">xapp-1-xxxxxxxxxxxx</span>
-                            <br>
-                            <span class="comment"># App-Level Token → Features → Socket Mode</span>
-                            <br><br>
-                            <span class="key">SLACK_BOT_TOKEN</span>=<span class="str">xoxb-xxxxxxxxxxxx</span>
-                            <br>
-                            <span class="comment"># Bot Token → Features → OAuth &amp; Permissions</span>
-                            <br><br>
-                            <span class="key">SLACK_SIGNING_SECRET</span>=<span class="str">xxxxxxxxxxxxxxx</span>
-                            <br>
-                            <span class="comment"># Signing Secret → Settings → Basic Information</span>
-                        </div>
-                    </div>
-                    <div class="half" style="display:flex;flex-direction:column;gap:6px;justify-content:center">
-                        <div class="card card-green" style="padding:8px 14px">
-                            <div class="card-label" style="color:var(--green);font-size:9px"><i class="fa-solid fa-check-circle"></i> Verified</div>
-                            <div class="card-body" style="font-size:11px">A <code style="font-family:JetBrains Mono;font-size:10px;background:var(--bg3);padding:1px 3px;border-radius:3px">.env</code> file already exists.</div>
-                        </div>
-                        <div class="card card-amber" style="padding:8px 14px">
-                            <div class="card-label" style="color:var(--amber);font-size:9px"><i class="fa-solid fa-lightbulb"></i> Token tips</div>
-                            <div style="font-size:10px;color:var(--text2);line-height:1.4">
-                                <div><span class="badge badge-blue" style="font-size:7px;padding:1px 6px">xapp-</span> App token</div>
-                                <div><span class="badge badge-green" style="font-size:7px;padding:1px 6px">xoxb-</span> Bot token</div>
-                                <div style="margin-top:2px">Wrong tokens → <code style="font-family:JetBrains Mono;font-size:8px;color:var(--red)">invalid_auth</code></div>
-                            </div>
-                        </div>
-                        <div class="card card-blue" style="padding:8px 14px">
-                            <div class="card-label" style="color:var(--blue);font-size:9px"><i class="fa-solid fa-file"></i> .env.example</div>
-                            <div class="card-body" style="font-size:11px">Template included — copy &amp; fill.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 6: Running -->
-            <div class="slide compact" data-section="RUNNING"><span class="section-tag">Running</span>
-                <div class="s-section">Step 3 &mdash; Launch</div>
-                <h2 class="s-title" style="font-size:30px">Install dependencies and run</h2>
-                <div class="split" style="flex:1;align-items:center;margin-top:6px">
-                    <div class="half" style="display:flex;flex-direction:column;gap:6px;justify-content:center">
-                        <div class="code-block" style="flex-shrink:0;font-size:10px;padding:8px 10px">
-                            <span class="comment"># 1. Ensure Python 3.11+</span>
-                            <br>
-                            python3 --version
-                            <br><br>
-                            <span class="comment"># 2. Create virtual environment</span>
-                            <br>
-                            python3 -m venv .venv
-                            <br><br>
-                            <span class="comment"># 3. Install dependencies</span>
-                            <br>
-                            .venv/bin/pip install -e ".[dev]"
-                            <br><br>
-                            <span class="comment"># 4. Run the bot</span>
-                            <br>
-                            .venv/bin/python -m src.app
-                        </div>
-                    </div>
-                    <div class="half" style="display:flex;flex-direction:column;gap:5px;justify-content:center">
-                        <div class="card card-green" style="padding:7px 12px">
-                            <div class="card-label" style="color:var(--green);font-size:9px"><i class="fa-solid fa-terminal"></i> Using Make</div>
-                            <div class="card-body" style="font-size:10px;margin-top:1px;line-height:1.5">
-                                <code style="font-family:JetBrains Mono;font-size:10px;background:var(--bg3);padding:1px 3px;border-radius:3px;color:var(--green)">make run</code> &mdash; starts &nbsp;
-                                <code style="font-family:JetBrains Mono;font-size:10px;background:var(--bg3);padding:1px 3px;border-radius:3px;color:var(--blue)">make test</code> &mdash; tests &nbsp;
-                                <code style="font-family:JetBrains Mono;font-size:10px;background:var(--bg3);padding:1px 3px;border-radius:3px;color:var(--amber)">make migrate</code> &mdash; init DB
-                            </div>
-                        </div>
-                        <div class="card card-amber" style="padding:7px 12px">
-                            <div class="card-label" style="color:var(--amber);font-size:9px"><i class="fa-solid fa-clock"></i> Keep it running (tmux)</div>
-                            <div style="font-size:9px;color:var(--text2);margin-top:1px;line-height:1.4">
-                                <code style="font-family:JetBrains Mono;font-size:9px;background:var(--bg3);padding:1px 3px;border-radius:3px;color:var(--amber)">tmux new-session -d -s slack-bot '.venv/bin/python -m src.app'</code>
-                                <div style="margin-top:2px">Logs: <code style="font-family:JetBrains Mono;font-size:9px;background:var(--bg3);padding:1px 3px;border-radius:3px">tmux capture-pane -t slack-bot -p</code></div>
-                                <div>Stop: <code style="font-family:JetBrains Mono;font-size:9px;background:var(--bg3);padding:1px 3px;border-radius:3px">tmux kill-session -t slack-bot</code></div>
-                            </div>
-                        </div>
-                        <div class="card card-blue" style="padding:7px 12px">
-                            <div class="card-label" style="color:var(--blue);font-size:9px"><i class="fa-solid fa-circle-info"></i> Expected output</div>
-                            <div style="font-size:10px;margin-top:1px;line-height:1.4">
-                                <div style="color:var(--green)">✓ Bolt app is running!</div>
-                                <div style="color:var(--text2)">✓ A new session has been established</div>
-                                <div style="color:var(--text2)">✓ Starting to receive messages</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 7: Verify It Works -->
-            <div class="slide" data-section="RUNNING"><span class="section-tag">Running</span>
-                <div class="s-section">Step 4 &mdash; Verify</div>
-                <h2 class="s-title" style="font-size:38px">Check the bot is live</h2>
+            <!-- Slide 2: Git Basics -->
+            <div class="slide" data-section="GIT"><span class="section-tag">Git</span>
+                <div class="s-section">Version Control</div>
+                <h2 class="s-title" style="font-size:38px">Git: commit, branch, switch, merge</h2>
                 <div class="split" style="flex:1;align-items:center;margin-top:16px">
-                    <div class="half" style="display:flex;flex-direction:column;gap:14px;justify-content:center">
-                        <div class="card card-green" style="padding:18px 22px">
-                            <div class="step-row">
-                                <div style="width:40px;height:40px;border-radius:8px;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--green30)">
-                                    <span style="font-size:16px;font-weight:900;color:var(--green)">1</span>
-                                </div>
-                                <div style="flex:1;padding-left:10px">
-                                    <div style="font-size:15px;font-weight:700;color:var(--text)">Open Slack App Home</div>
-                                    <div style="font-size:12px;color:var(--text2);margin-top:2px">In Slack, click the app name in the left sidebar</div>
-                                </div>
+                    <div class="half" style="display:flex;flex-direction:column;gap:10px;justify-content:center">
+                        <div class="card" style="padding:12px 16px;display:flex;align-items:center;gap:12px">
+                            <div style="width:32px;height:32px;border-radius:8px;background:rgba(10,132,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--blue30)">
+                                <span style="font-size:12px;font-weight:900;color:var(--blue)">1</span>
+                            </div>
+                            <div style="flex:1">
+                                <div style="font-size:14px;font-weight:700;color:var(--blue)">commit</div>
+                                <div style="font-size:11px;color:var(--text2);margin-top:1px">Save a snapshot of your work</div>
                             </div>
                         </div>
-                        <div class="card card-blue" style="padding:18px 22px">
-                            <div class="step-row">
-                                <div style="width:40px;height:40px;border-radius:8px;background:rgba(10,132,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--blue30)">
-                                    <span style="font-size:16px;font-weight:900;color:var(--blue)">2</span>
-                                </div>
-                                <div style="flex:1;padding-left:10px">
-                                    <div style="font-size:15px;font-weight:700;color:var(--text)">See the home tab</div>
-                                    <div style="font-size:12px;color:var(--text2);margin-top:2px">Welcome text, upcoming bookings, and occupancy bars</div>
-                                </div>
+                        <div class="card" style="padding:12px 16px;display:flex;align-items:center;gap:12px">
+                            <div style="width:32px;height:32px;border-radius:8px;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--green30)">
+                                <span style="font-size:12px;font-weight:900;color:var(--green)">2</span>
+                            </div>
+                            <div style="flex:1">
+                                <div style="font-size:14px;font-weight:700;color:var(--green)">branch</div>
+                                <div style="font-size:11px;color:var(--text2);margin-top:1px">Create an isolated line of development</div>
                             </div>
                         </div>
-                        <div class="card card-amber" style="padding:18px 22px">
-                            <div class="step-row">
-                                <div style="width:40px;height:40px;border-radius:8px;background:rgba(245,158,11,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--amber30)">
-                                    <span style="font-size:16px;font-weight:900;color:var(--amber)">3</span>
-                                </div>
-                                <div style="flex:1;padding-left:10px">
-                                    <div style="font-size:15px;font-weight:700;color:var(--text)">Test slash command</div>
-                                    <div style="font-size:12px;color:var(--text2);margin-top:2px">Type <code style="font-family:JetBrains Mono;font-size:11px;background:var(--bg3);padding:1px 4px;border-radius:3px;color:var(--amber)">/book-desk</code> in any channel</div>
-                                </div>
+                        <div class="card" style="padding:12px 16px;display:flex;align-items:center;gap:12px">
+                            <div style="width:32px;height:32px;border-radius:8px;background:rgba(245,158,11,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--amber30)">
+                                <span style="font-size:12px;font-weight:900;color:var(--amber)">3</span>
+                            </div>
+                            <div style="flex:1">
+                                <div style="font-size:14px;font-weight:700;color:var(--amber)">switch</div>
+                                <div style="font-size:11px;color:var(--text2);margin-top:1px">Move between branches</div>
                             </div>
                         </div>
-                        <div class="card card-red" style="padding:18px 22px">
-                            <div class="step-row">
-                                <div style="width:40px;height:40px;border-radius:8px;background:rgba(239,68,68,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--red30)">
-                                    <span style="font-size:16px;font-weight:900;color:var(--red)">4</span>
-                                </div>
-                                <div style="flex:1;padding-left:10px">
-                                    <div style="font-size:15px;font-weight:700;color:var(--text)">Say "hello"</div>
-                                    <div style="font-size:12px;color:var(--text2);margin-top:2px">DM the bot "hello" — it should reply</div>
-                                </div>
+                        <div class="card" style="padding:12px 16px;display:flex;align-items:center;gap:12px">
+                            <div style="width:32px;height:32px;border-radius:8px;background:rgba(239,68,68,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--red30)">
+                                <span style="font-size:12px;font-weight:900;color:var(--red)">4</span>
                             </div>
-                        </div>
-                        <div style="display:flex;gap:8px;margin-top:4px">
-                            <div style="flex:1;padding:8px 14px;background:var(--bg2);border-radius:8px;border:1px solid var(--blue15);text-align:center">
-                                <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--blue)">Need to restart?</div>
-                                <div style="font-size:12px;color:var(--text2);margin-top:2px;font-family:JetBrains Mono">tmux kill-session -t slack-bot &amp;&amp; tmux new ...</div>
+                            <div style="flex:1">
+                                <div style="font-size:14px;font-weight:700;color:var(--red)">merge</div>
+                                <div style="font-size:11px;color:var(--text2);margin-top:1px">Combine changes from different branches</div>
                             </div>
                         </div>
                     </div>
-                    <div class="half diagram"><svg viewBox="0 0 460 340">
-                            <!-- Verification steps diagram -->
-                            <rect x="40" y="8" width="380" height="52" rx="10" fill="var(--bg2)" stroke="var(--green)" stroke-width="2" />
-                            <text x="230" y="28" fill="var(--green)" font-size="11" font-family="Source Sans 3" font-weight="800" text-anchor="middle">1. Open the App Home tab</text>
-                            <text x="230" y="46" fill="var(--text2)" font-size="9" font-family="Source Sans 3" text-anchor="middle">Click app in Slack sidebar → Home tab loads</text>
+                    <div class="half diagram"><svg viewBox="0 0 480 340">
+                            <!-- Background labels -->
+                            <text x="10" y="72" fill="var(--blue)" font-size="13" font-family="Source Sans 3" font-weight="800" text-anchor="start">main</text>
+                            <text x="10" y="197" fill="var(--green)" font-size="13" font-family="Source Sans 3" font-weight="800" text-anchor="start">feature</text>
 
-                            <line x1="230" y1="60" x2="230" y2="78" stroke="var(--green)" stroke-width="2" marker-end="url(#arrowGreen)" />
+                            <!-- main line -->
+                            <line x1="55" y1="70" x2="440" y2="70" stroke="var(--blue)" stroke-width="3" />
+                            <!-- feature line -->
+                            <line x1="210" y1="195" x2="440" y2="195" stroke="var(--green)" stroke-width="3" />
 
-                            <rect x="40" y="80" width="380" height="52" rx="10" fill="var(--bg2)" stroke="var(--blue)" stroke-width="2" />
-                            <text x="230" y="100" fill="var(--blue)" font-size="11" font-family="Source Sans 3" font-weight="800" text-anchor="middle">2. Home view is published</text>
-                            <text x="230" y="118" fill="var(--text2)" font-size="9" font-family="Source Sans 3" text-anchor="middle">Welcome message + occupancy bars visible</text>
+                            <!-- main commits -->
+                            <circle cx="80" cy="70" r="22" fill="var(--bg2)" stroke="var(--blue)" stroke-width="3" />
+                            <text x="80" y="74" fill="var(--blue)" font-size="12" font-family="Source Sans 3" font-weight="800" text-anchor="middle">C1</text>
 
-                            <line x1="230" y1="132" x2="230" y2="150" stroke="var(--blue)" stroke-width="2" marker-end="url(#arrowBlue)" />
+                            <circle cx="190" cy="70" r="22" fill="var(--bg2)" stroke="var(--blue)" stroke-width="3" />
+                            <text x="190" y="74" fill="var(--blue)" font-size="12" font-family="Source Sans 3" font-weight="800" text-anchor="middle">C2</text>
 
-                            <rect x="40" y="152" width="380" height="52" rx="10" fill="var(--bg2)" stroke="var(--amber)" stroke-width="2" />
-                            <text x="230" y="172" fill="var(--amber)" font-size="11" font-family="Source Sans 3" font-weight="800" text-anchor="middle">3. Use /book-desk command</text>
-                            <text x="230" y="190" fill="var(--text2)" font-size="9" font-family="Source Sans 3" text-anchor="middle">Slash command opens a booking modal</text>
+                            <circle cx="300" cy="70" r="22" fill="var(--bg2)" stroke="var(--blue)" stroke-width="3" />
+                            <text x="300" y="74" fill="var(--blue)" font-size="12" font-family="Source Sans 3" font-weight="800" text-anchor="middle">C3</text>
 
-                            <line x1="230" y1="204" x2="230" y2="222" stroke="var(--amber)" stroke-width="2" marker-end="url(#arrowAmber)" />
+                            <circle cx="420" cy="70" r="22" fill="var(--bg2)" stroke="var(--blue)" stroke-width="3" />
+                            <text x="420" y="74" fill="var(--blue)" font-size="12" font-family="Source Sans 3" font-weight="800" text-anchor="middle">C7</text>
 
-                            <rect x="40" y="224" width="380" height="52" rx="10" fill="var(--bg2)" stroke="var(--green)" stroke-width="2" />
-                            <text x="230" y="244" fill="var(--green)" font-size="11" font-family="Source Sans 3" font-weight="800" text-anchor="middle">4. Bot responds to messages</text>
-                            <text x="230" y="262" fill="var(--text2)" font-size="9" font-family="Source Sans 3" text-anchor="middle">DM "hello" → bot replies "Hello &lt;@you&gt;!"</text>
+                            <!-- feature commits -->
+                            <circle cx="210" cy="195" r="22" fill="var(--bg2)" stroke="var(--green)" stroke-width="3" />
+                            <text x="210" y="199" fill="var(--green)" font-size="12" font-family="Source Sans 3" font-weight="800" text-anchor="middle">C4</text>
 
-                            <!-- Check mark at bottom -->
-                            <rect x="130" y="302" width="200" height="30" rx="20" fill="rgba(34,197,94,0.1)" stroke="var(--green30)" stroke-width="1" />
-                            <text x="230" y="320" fill="var(--green)" font-size="11" font-family="Source Sans 3" font-weight="800" text-anchor="middle" dominant-baseline="central">✓ All working</text>
+                            <circle cx="300" cy="195" r="22" fill="var(--bg2)" stroke="var(--green)" stroke-width="3" />
+                            <text x="300" y="199" fill="var(--green)" font-size="12" font-family="Source Sans 3" font-weight="800" text-anchor="middle">C5</text>
+
+                            <circle cx="420" cy="195" r="22" fill="var(--bg2)" stroke="var(--green)" stroke-width="3" />
+                            <text x="420" y="199" fill="var(--green)" font-size="12" font-family="Source Sans 3" font-weight="800" text-anchor="middle">C6</text>
+
+                            <!-- Arrow: C3 -> C4 (branch) -->
+                            <line x1="300" y1="92" x2="210" y2="173" stroke="var(--amber)" stroke-width="3" marker-end="url(#arrowAmber)" />
+
+                            <!-- Arrow: C6 -> C7 (merge) -->
+                            <line x1="420" y1="173" x2="420" y2="92" stroke="var(--red)" stroke-width="3" marker-end="url(#arrowRed)" />
+
+                            <!-- Label: git switch -c feature -->
+                            <rect x="175" y="115" width="145" height="30" rx="6" fill="var(--bg2)" stroke="var(--amber)" stroke-width="2" />
+                            <text x="247" y="135" fill="var(--amber)" font-size="10" font-family="Source Sans 3" font-weight="700" text-anchor="middle">git switch -c feature</text>
+
+                            <!-- Label: git merge feature -->
+                            <rect x="362" y="115" width="115" height="30" rx="6" fill="var(--bg2)" stroke="var(--red)" stroke-width="2" />
+                            <text x="420" y="135" fill="var(--red)" font-size="10" font-family="Source Sans 3" font-weight="700" text-anchor="middle">git merge feature</text>
+
+                            <!-- Footer legend -->
+                            <rect x="40" y="280" width="410" height="40" rx="6" fill="var(--bg2)" stroke="var(--blue15)" stroke-width="1" />
+                            <text x="245" y="296" fill="var(--text2)" font-size="9" font-family="Source Sans 3" font-weight="600" text-anchor="middle">Each circle is a commit (snapshot of your code)</text>
+                            <text x="245" y="310" fill="var(--text3)" font-size="8" font-family="Source Sans 3" font-weight="500" text-anchor="middle">Feature branch evolves independently → merged back into main</text>
                         </svg></div>
                 </div>
             </div>
 
-            <!-- Slide 8: Troubleshooting -->
-            <div class="slide" data-section="TROUBLESHOOT"><span class="section-tag">Troubleshoot</span>
-                <div class="s-section">Common Issues</div>
-                <h2 class="s-title" style="font-size:38px">Troubleshooting</h2>
-                <div class="split" style="flex:1;align-items:center;margin-top:8px">
-                    <div class="half" style="display:flex;flex-direction:column;gap:8px;justify-content:center">
-                        <div class="card card-red" style="padding:12px 18px;display:flex;gap:12px;align-items:flex-start">
-                            <div style="flex-shrink:0;margin-top:2px"><i class="fa-solid fa-circle-exclamation" style="color:var(--red);font-size:14px"></i></div>
-                            <div>
-                                <div style="font-size:14px;font-weight:700;color:var(--red)">not_enabled</div>
-                                <div style="font-size:12px;color:var(--text2);margin-top:2px">App Home tab is not enabled. Go to <strong>Features → App Home</strong> and toggle <strong>"Always Show My Bot's Tabs"</strong> ON. Then reinstall the app.</div>
-                            </div>
+            <!-- Slide 3: OpenCode -->
+            <div class="slide" data-section="OPENCODE"><span class="section-tag">OpenCode</span>
+                <div class="s-section">AI-Assisted Development</div>
+                <h2 class="s-title" style="font-size:38px">OpenCode: an AI agent in the terminal</h2>
+                <div class="split" style="flex:1;align-items:center;margin-top:20px">
+                    <div class="half" style="display:flex;flex-direction:column;gap:16px;justify-content:center">
+                        <p class="s-body" style="font-size:16px;line-height:1.7">An AI coding assistant that works <strong>directly in the terminal</strong>. It understands your codebase, searches files, edits code, runs commands, and commits changes — all through natural language.</p>
+                        <div class="card card-blue" style="padding:14px 16px">
+                            <div class="card-title" style="font-size:14px"><i class="fa-solid fa-comment" style="color:var(--blue);margin-right:6px"></i>Natural Language</div>
+                            <div class="card-body" style="margin-top:4px;font-size:12px">Describe what you want in plain English — OpenCode figures out how to do it.</div>
                         </div>
-                        <div class="card card-red" style="padding:12px 18px;display:flex;gap:12px;align-items:flex-start">
-                            <div style="flex-shrink:0;margin-top:2px"><i class="fa-solid fa-circle-exclamation" style="color:var(--red);font-size:14px"></i></div>
-                            <div>
-                                <div style="font-size:14px;font-weight:700;color:var(--red)">invalid_auth / not_authed</div>
-                                <div style="font-size:12px;color:var(--text2);margin-top:2px">Token is wrong or the app was uninstalled. Double-check the <code style="font-family:JetBrains Mono;font-size:10px;background:var(--bg3);padding:1px 4px;border-radius:3px">.env</code> file and reinstall from OAuth &amp; Permissions.</div>
-                            </div>
+                        <div class="card card-green" style="padding:14px 16px">
+                            <div class="card-title" style="font-size:14px"><i class="fa-solid fa-code" style="color:var(--green);margin-right:6px"></i>Code &amp; Commands</div>
+                            <div class="card-body" style="margin-top:4px;font-size:12px">Reads, writes, and edits files. Runs terminals commands, installs packages, creates commits.</div>
                         </div>
-                        <div class="card card-red" style="padding:12px 18px;display:flex;gap:12px;align-items:flex-start">
-                            <div style="flex-shrink:0;margin-top:2px"><i class="fa-solid fa-circle-exclamation" style="color:var(--red);font-size:14px"></i></div>
-                            <div>
-                                <div style="font-size:14px;font-weight:700;color:var(--red)">Home page blank</div>
-                                <div style="font-size:12px;color:var(--text2);margin-top:2px">Check bot logs for <code style="font-family:JetBrains Mono;font-size:10px;background:var(--bg3);padding:1px 4px;border-radius:3px">not_enabled</code>. If not, the <code style="font-family:JetBrains Mono;font-size:10px;background:var(--bg3);padding:1px 4px;border-radius:3px">tab</code> filter might be blocking it (fixed in the current code).</div>
-                            </div>
+                        <div class="card card-amber" style="padding:14px 16px">
+                            <div class="card-title" style="font-size:14px"><i class="fa-solid fa-git-alt" style="color:var(--amber);margin-right:6px"></i>Git Aware</div>
+                            <div class="card-body" style="margin-top:4px;font-size:12px">Works with the repo: checks status, diffs changes, stages and commits code.</div>
                         </div>
-                        <div class="card card-red" style="padding:12px 18px;display:flex;gap:12px;align-items:flex-start">
-                            <div style="flex-shrink:0;margin-top:2px"><i class="fa-solid fa-circle-exclamation" style="color:var(--red);font-size:14px"></i></div>
-                            <div>
-                                <div style="font-size:14px;font-weight:700;color:var(--red)">Connection reset by peer</div>
-                                <div style="font-size:12px;color:var(--text2);margin-top:2px">Socket Mode connection dropped. The SDK auto-reconnects, but check network stability and that the app-level token has <code style="font-family:JetBrains Mono;font-size:10px">connections:write</code> scope.</div>
+                    </div>
+                    <div class="half diagram"><svg viewBox="0 0 380 340">
+                            <!-- Flow arrows and boxes -->
+                            <rect x="80" y="10" width="220" height="40" rx="8" fill="var(--bg2)" stroke="var(--blue)" stroke-width="1.5" />
+                            <text x="190" y="30" fill="var(--blue)" font-size="10" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Your Request</text>
+                            <text x="190" y="43" fill="var(--text3)" font-size="7" font-family="Source Sans 3" text-anchor="middle">"add dark mode toggle"</text>
+
+                            <line x1="190" y1="50" x2="190" y2="72" stroke="var(--blue)" stroke-width="1.5" marker-end="url(#arrowBlue)" />
+
+                            <rect x="60" y="75" width="260" height="40" rx="8" fill="var(--bg2)" stroke="var(--amber)" stroke-width="1.5" />
+                            <text x="190" y="93" fill="var(--amber)" font-size="10" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Reads the codebase</text>
+                            <text x="190" y="107" fill="var(--text3)" font-size="7" font-family="Source Sans 3" text-anchor="middle">settings.tsx · App.tsx · styles/*</text>
+
+                            <line x1="190" y1="115" x2="190" y2="137" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arrowAmber)" />
+
+                            <rect x="60" y="140" width="260" height="40" rx="8" fill="var(--bg2)" stroke="var(--green)" stroke-width="1.5" />
+                            <text x="190" y="158" fill="var(--green)" font-size="10" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Edits files</text>
+                            <text x="190" y="172" fill="var(--text3)" font-size="7" font-family="Source Sans 3" text-anchor="middle">Creates SettingsToggle · Updates CSS</text>
+
+                            <line x1="190" y1="180" x2="190" y2="202" stroke="var(--green)" stroke-width="1.5" marker-end="url(#arrowGreen)" />
+
+                            <rect x="60" y="205" width="260" height="40" rx="8" fill="var(--bg2)" stroke="var(--blue)" stroke-width="1.5" />
+                            <text x="190" y="223" fill="var(--blue)" font-size="10" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Verifies &amp; commits</text>
+                            <text x="190" y="237" fill="var(--text3)" font-size="7" font-family="Source Sans 3" text-anchor="middle">Runs linter · git commit</text>
+
+                            <line x1="190" y1="245" x2="190" y2="275" stroke="var(--blue)" stroke-width="1.5" marker-end="url(#arrowBlue)" />
+
+                            <rect x="80" y="278" width="220" height="40" rx="8" fill="var(--bg2)" stroke="var(--green)" stroke-width="2" />
+                            <text x="190" y="298" fill="var(--green)" font-size="10" font-family="Source Sans 3" font-weight="700" text-anchor="middle" dominant-baseline="central">Done</text>
+                            <text x="190" y="311" fill="var(--text3)" font-size="7" font-family="Source Sans 3" text-anchor="middle">Result: working feature</text>
+
+                            <!-- Badge overlay -->
+                            <rect x="2" y="320" width="376" height="18" rx="4" fill="rgba(10,132,255,0.06)" stroke="var(--blue15)" stroke-width="0.5" />
+                            <text x="190" y="329" fill="var(--text2)" font-size="7" font-family="Source Sans 3" font-weight="600" text-anchor="middle" dominant-baseline="central">All via natural language — no manual file navigation</text>
+                        </svg></div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Context Rotting -->
+            <div class="slide" data-section="OPENCODE"><span class="section-tag">OpenCode</span>
+                <div class="s-section">AI Best Practices</div>
+                <h2 class="s-title" style="font-size:38px">Context Rotting: when the AI forgets</h2>
+                <div class="split" style="flex:1;align-items:center;margin-top:16px">
+                    <div class="half" style="display:flex;flex-direction:column;gap:12px;justify-content:center">
+                        <div class="card card-blue" style="padding:14px 16px">
+                            <div class="card-title" style="font-size:14px"><i class="fa-solid fa-border-all" style="color:var(--blue);margin-right:6px"></i>Limited Context Window</div>
+                            <div class="card-body" style="margin-top:4px;font-size:12px">AI agents can only "see" a portion of your project at once. As conversations grow, older context gets pushed out.</div>
+                        </div>
+                        <div class="card card-amber" style="padding:14px 16px">
+                            <div class="card-title" style="font-size:14px"><i class="fa-solid fa-triangle-exclamation" style="color:var(--amber);margin-right:6px"></i>The Rot Effect</div>
+                            <div class="card-body" style="margin-top:4px;font-size:12px">After many exchanges, the AI forgets earlier files and decisions. It may re-read, make inconsistent changes, or lose track of the architecture.</div>
+                        </div>
+                        <div class="card card-green" style="padding:14px 16px">
+                            <div class="card-title" style="font-size:14px"><i class="fa-solid fa-lightbulb" style="color:var(--green);margin-right:6px"></i>Prevention</div>
+                            <div class="card-body" style="margin-top:4px;font-size:12px">Keep prompts focused. Start fresh sessions for different features. Re-read key files when needed. Use clear, self-contained requests.</div>
+                        </div>
+                    </div>
+                    <div class="half diagram"><svg viewBox="0 0 460 340">
+                            <!-- Header -->
+                            <text x="230" y="22" fill="var(--text)" font-size="12" font-family="Source Sans 3" font-weight="700" text-anchor="middle">Context Window Over Time</text>
+
+                            <!-- Timeline line -->
+                            <line x1="45" y1="50" x2="415" y2="50" stroke="var(--blue30)" stroke-width="2" />
+
+                            <!-- Dot 1 -->
+                            <circle cx="90" cy="50" r="8" fill="var(--green)" />
+
+                            <!-- Stage 1 Files -->
+                            <rect x="54" y="78" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--green30)" stroke-width="1.5" />
+                            <text x="90" y="91" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">App.tsx</text>
+                            <text x="132" y="91" fill="var(--green)" font-size="10" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">✓</text>
+
+                            <rect x="54" y="110" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--green30)" stroke-width="1.5" />
+                            <text x="90" y="123" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">utils.ts</text>
+                            <text x="132" y="123" fill="var(--green)" font-size="10" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">✓</text>
+
+                            <rect x="54" y="142" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--green30)" stroke-width="1.5" />
+                            <text x="90" y="155" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">styles.css</text>
+                            <text x="132" y="155" fill="var(--green)" font-size="10" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">✓</text>
+
+                            <text x="90" y="188" fill="var(--green)" font-size="9" font-family="Source Sans 3" font-weight="700" text-anchor="middle">Fresh</text>
+                            <text x="90" y="200" fill="var(--text2)" font-size="7" font-family="Source Sans 3" text-anchor="middle">All files visible</text>
+
+                            <!-- Arrow 1→2 -->
+                            <line x1="130" y1="50" x2="190" y2="50" stroke="var(--amber)" stroke-width="2" marker-end="url(#arrowAmber)" />
+
+                            <!-- Dot 2 -->
+                            <circle cx="230" cy="50" r="8" fill="var(--amber)" />
+
+                            <!-- Stage 2 Files -->
+                            <g opacity="0.3">
+                                <rect x="194" y="78" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--amber30)" stroke-width="1" />
+                                <text x="230" y="91" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">App.tsx</text>
+                            </g>
+
+                            <rect x="194" y="110" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--green30)" stroke-width="1.5" />
+                            <text x="230" y="123" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">utils.ts</text>
+                            <text x="272" y="123" fill="var(--green)" font-size="10" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">✓</text>
+
+                            <g opacity="0.3">
+                                <rect x="194" y="142" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--amber30)" stroke-width="1" />
+                                <text x="230" y="155" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">styles.css</text>
+                            </g>
+
+                            <text x="230" y="188" fill="var(--amber)" font-size="9" font-family="Source Sans 3" font-weight="700" text-anchor="middle">Fading</text>
+                            <text x="230" y="200" fill="var(--text2)" font-size="7" font-family="Source Sans 3" text-anchor="middle">Partial context</text>
+
+                            <!-- Arrow 2→3 -->
+                            <line x1="270" y1="50" x2="330" y2="50" stroke="var(--red)" stroke-width="2" marker-end="url(#arrowRed)" />
+
+                            <!-- Dot 3 -->
+                            <circle cx="370" cy="50" r="8" fill="var(--red)" />
+
+                            <!-- Stage 3 Files -->
+                            <g opacity="0.2">
+                                <rect x="334" y="78" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--red30)" stroke-width="1" />
+                                <text x="370" y="91" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">App.tsx</text>
+                                <text x="412" y="91" fill="var(--red)" font-size="10" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">✗</text>
+                            </g>
+
+                            <g opacity="0.2">
+                                <rect x="334" y="110" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--red30)" stroke-width="1" />
+                                <text x="370" y="123" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">utils.ts</text>
+                                <text x="412" y="123" fill="var(--red)" font-size="10" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">✗</text>
+                            </g>
+
+                            <rect x="334" y="142" width="72" height="26" rx="6" fill="var(--bg2)" stroke="var(--green30)" stroke-width="1.5" />
+                            <text x="370" y="155" fill="var(--text)" font-size="8" font-family="JetBrains Mono" text-anchor="middle" dominant-baseline="central">styles.css</text>
+                            <text x="412" y="155" fill="var(--green)" font-size="10" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">✓</text>
+
+                            <text x="370" y="188" fill="var(--red)" font-size="9" font-family="Source Sans 3" font-weight="700" text-anchor="middle">Rot</text>
+                            <text x="370" y="200" fill="var(--text2)" font-size="7" font-family="Source Sans 3" text-anchor="middle">Forgotten context</text>
+
+                            <!-- Arrow to info -->
+                            <line x1="230" y1="216" x2="230" y2="232" stroke="var(--blue30)" stroke-width="1" marker-end="url(#arrowBlue)" />
+
+                            <!-- Bottom info bar -->
+                            <rect x="20" y="235" width="420" height="55" rx="6" fill="var(--bg2)" stroke="var(--blue15)" stroke-width="1" />
+                            <text x="230" y="254" fill="var(--text2)" font-size="8" font-family="Source Sans 3" font-weight="600" text-anchor="middle">The AI's context window is limited — older information "rots out"</text>
+                            <text x="230" y="268" fill="var(--text3)" font-size="7" font-family="Source Sans 3" text-anchor="middle">Keep sessions focused · Re-read key files · Start fresh for new features</text>
+
+                            <!-- Bottom badge -->
+                            <rect x="2" y="320" width="456" height="18" rx="4" fill="rgba(10,132,255,0.06)" stroke="var(--blue15)" stroke-width="0.5" />
+                            <text x="230" y="329" fill="var(--text2)" font-size="7" font-family="Source Sans 3" font-weight="600" text-anchor="middle" dominant-baseline="central">Use the terminal to re-establish context when the AI seems to "forget"</text>
+                        </svg></div>
+                </div>
+            </div>
+
+            <!-- Slide 5: git switch vs git checkout -->
+            <div class="slide" data-section="GIT"><span class="section-tag">Git</span>
+                <div class="s-section">Advanced Git</div>
+                <h2 class="s-title" style="font-size:38px">git checkout faceva TUTTO</h2>
+                <div class="s-subtitle" style="font-size:16px;margin-top:4px;margin-bottom:8px">Poi Git 2.23 (2019) ha separato i compiti in <strong>switch</strong> (branch) e <strong>restore</strong> (file)</div>
+                <div class="cols-2" style="flex:1;align-items:stretch;margin-top:4px">
+                    <div class="card card-amber" style="padding:16px;display:flex;flex-direction:column">
+                        <div class="card-label" style="color:var(--amber);margin-bottom:4px"><i class="fa-solid fa-spaghetti" style="margin-right:4px"></i> git checkout (old)</div>
+                        <div class="card-title" style="font-size:16px;margin-bottom:10px">Un unico comando, troppe responsabilità</div>
+                        <div style="font-size:13px;color:var(--text2);line-height:1.7;flex:1">
+                            <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                <span style="color:var(--amber)">git checkout &lt;branch&gt;</span>
+                                <span style="color:var(--text3);float:right">cambia branch</span>
+                            </div>
+                            <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                <span style="color:var(--amber)">git checkout -b &lt;new&gt;</span>
+                                <span style="color:var(--text3);float:right">crea e cambia branch</span>
+                            </div>
+                            <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                <span style="color:var(--amber)">git checkout -- &lt;file&gt;</span>
+                                <span style="color:var(--text3);float:right">scarta modifiche locali</span>
+                            </div>
+                            <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                <span style="color:var(--amber)">git checkout &lt;commit&gt; -- &lt;file&gt;</span>
+                                <span style="color:var(--text3);float:right">recupera file da commit</span>
+                            </div>
+                            <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                <span style="color:var(--amber)">git checkout &lt;commit&gt;</span>
+                                <span style="color:var(--text3);float:right">HEAD staccato (detached)</span>
+                            </div>
+                            <div style="margin-top:10px;padding:6px 10px;background:rgba(245,158,11,0.08);border-radius:6px;border:1px solid rgba(245,158,11,0.15)">
+                                <span style="color:var(--amber);font-weight:700">Problema:</span>
+                                <span style="color:var(--text2)"> se branch e file hanno lo stesso nome, Git non sa cosa fare → ambiguità</span>
                             </div>
                         </div>
                     </div>
-                    <div class="half" style="display:flex;flex-direction:column;gap:8px;justify-content:center">
-                        <div class="card card-amber" style="padding:12px 18px;display:flex;gap:12px;align-items:flex-start">
-                            <div style="flex-shrink:0;margin-top:2px"><i class="fa-solid fa-triangle-exclamation" style="color:var(--amber);font-size:14px"></i></div>
-                            <div>
-                                <div style="font-size:14px;font-weight:700;color:var(--amber)">Need to reinstall the app?</div>
-                                <div style="font-size:12px;color:var(--text2);margin-top:2px">After changing scopes or settings, go to <strong>OAuth &amp; Permissions</strong> → "Reinstall to Workspace". Tokens may change — update .env if so.</div>
+                    <div style="display:flex;flex-direction:column;gap:8px">
+                        <div class="card card-green" style="padding:16px;flex:1">
+                            <div class="card-label" style="color:var(--green);margin-bottom:4px"><i class="fa-solid fa-code-branch" style="margin-right:4px"></i> git switch (new)</div>
+                            <div class="card-title" style="font-size:16px;margin-bottom:10px">Solo branch: chiaro e safe</div>
+                            <div style="font-size:13px;color:var(--text2);line-height:1.7">
+                                <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                    <span style="color:var(--green)">git switch &lt;branch&gt;</span>
+                                    <span style="color:var(--text3);float:right">cambia branch</span>
+                                </div>
+                                <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                    <span style="color:var(--green)">git switch -c &lt;new&gt;</span>
+                                    <span style="color:var(--text3);float:right">crea e cambia</span>
+                                </div>
+                                <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:6px;line-height:1.8">
+                                    <span style="color:var(--green)">git switch --detach &lt;commit&gt;</span>
+                                    <span style="color:var(--text3);float:right">HEAD staccato (esplicito)</span>
+                                </div>
+                                <div style="margin-top:10px;padding:8px 10px;background:rgba(34,197,94,0.08);border-radius:6px;border:1px solid rgba(34,197,94,0.15)">
+                                    <span style="color:var(--green);font-weight:700">Vantaggio:</span>
+                                    <span style="color:var(--text2)"> un solo compito → nessuna ambiguità. Se provi a fare <code style="font-family:'JetBrains Mono',monospace;background:var(--bg3);padding:0 4px;border-radius:3px;font-size:11px">switch file</code>, Git rifiuta.</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="card card-amber" style="padding:12px 18px;display:flex;gap:12px;align-items:flex-start">
-                            <div style="flex-shrink:0;margin-top:2px"><i class="fa-solid fa-triangle-exclamation" style="color:var(--amber);font-size:14px"></i></div>
-                            <div>
-                                <div style="font-size:14px;font-weight:700;color:var(--amber)">Virtual environment issues</div>
-                                <div style="font-size:12px;color:var(--text2);margin-top:2px">If <code style="font-family:JetBrains Mono;font-size:10px">pip</code> is missing: run <code style="font-family:JetBrains Mono;font-size:10px">python3 -m venv .venv --without-pip</code> then <code style="font-family:JetBrains Mono;font-size:10px">python3 /tmp/get-pip.py</code>.</div>
-                            </div>
-                        </div>
-                        <div class="card card-blue" style="padding:12px 18px;display:flex;gap:12px;align-items:flex-start">
-                            <div style="flex-shrink:0;margin-top:2px"><i class="fa-solid fa-book" style="color:var(--blue);font-size:14px"></i></div>
-                            <div>
-                                <div style="font-size:14px;font-weight:700;color:var(--blue)">Quick reference</div>
-                                <div style="font-size:12px;color:var(--text2);margin-top:2px;line-height:1.8">
-                                    <code style="font-family:JetBrains Mono;font-size:11px;background:var(--bg3);padding:1px 4px;border-radius:3px;display:inline-block;margin-bottom:2px">SLACK_SETTINGS.txt</code> — full settings guide<br>
-                                    <code style="font-family:JetBrains Mono;font-size:11px;background:var(--bg3);padding:1px 4px;border-radius:3px">make run</code> — start the bot<br>
-                                    <code style="font-family:JetBrains Mono;font-size:11px;background:var(--bg3);padding:1px 4px;border-radius:3px">make test</code> — run tests<br>
-                                    <code style="font-family:JetBrains Mono;font-size:11px;background:var(--bg3);padding:1px 4px;border-radius:3px">tmux capture-pane -t slack-bot -p</code> — check logs
+                        <div class="card card-amber" style="padding:16px">
+                            <div class="card-label" style="color:var(--blue);margin-bottom:4px"><i class="fa-solid fa-rotate-left" style="margin-right:4px"></i> git restore (new)</div>
+                            <div class="card-title" style="font-size:16px;margin-bottom:10px">Solo file: l'ex checkout --</div>
+                            <div style="font-size:13px;color:var(--text2);line-height:1.7">
+                                <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:4px;line-height:1.8">
+                                    <span style="color:var(--blue)">git restore &lt;file&gt;</span>
+                                    <span style="color:var(--text3);float:right">scarta modifiche</span>
+                                </div>
+                                <div style="background:var(--bg3);border-radius:6px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8">
+                                    <span style="color:var(--blue)">git restore --source=&lt;commit&gt; &lt;file&gt;</span>
+                                    <span style="color:var(--text3);float:right">recupera da commit</span>
                                 </div>
                             </div>
                         </div>
@@ -1007,11 +960,11 @@
 
         <div id="progress"></div>
         <div id="controls">
-            <i class="fa-solid fa-calendar-check" style="color:var(--blue);font-size:16px;opacity:0.8"></i>
+            <img src="https://cdn.prod.website-files.com/67a4c547ac46cdf433fcc313/67b4539996b1d9ec315a12c7_logo-footer.svg" alt="Cubbit" style="height:16px;opacity:0.8">
             <span style="width:1px;height:16px;background:rgba(255,255,255,0.1);display:block"></span>
-            <span id="section-label">SLACK DESK BOT</span>
+            <span id="section-label">THE HOOK</span>
             <button id="btn-prev" title="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
-            <span id="slide-counter">1 / 8</span>
+            <span id="slide-counter">1 / 53</span>
             <button id="btn-next" title="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
             <button id="download-btn" title="Download this deck"><i class="fa-solid fa-download"></i></button>
             <button id="fullscreen-btn" title="Toggle fullscreen"><i class="fa-solid fa-expand"></i></button>
