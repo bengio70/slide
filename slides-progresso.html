@@ -102,15 +102,15 @@
                     <i class="fa-solid fa-arrow-trend-up" style="font-size:32px;color:var(--blue)"></i>
                 </div>
                 <h1 class="s-title" style="font-size:52px">Slack Desk Bot</h1>
-                <p class="s-subtitle" style="font-size:22px;margin-top:16px">Progress &mdash; June 29&ndash;30, 2026</p>
+                <p class="s-subtitle" style="font-size:22px;margin-top:16px">Progress &mdash; Jun 29 &ndash; Jul 1, 2026</p>
                 <div style="display:flex;gap:12px;margin-top:36px;position:relative;z-index:1">
-                    <span class="badge badge-blue">9 commits</span>
-                    <span class="badge badge-green">+4,139 lines</span>
-                    <span class="badge badge-red">&minus;262 lines</span>
-                    <span class="badge badge-amber">&asymp;3h 15m</span>
+                    <span class="badge badge-blue">2 commits + uncommitted</span>
+                    <span class="badge badge-green">+4,739 lines</span>
+                    <span class="badge badge-red">&minus;404 lines</span>
+                    <span class="badge badge-amber">&asymp;5h 30m</span>
                 </div>
                 <p class="s-body" style="font-size:13px;margin-top:40px;color:var(--text3)">
-                    Stable add-office flow &bull; Home tab rework &bull; Office Map Editor Wave 1
+                    Stable add-office &bull; Home tab rework &bull; Map Editor Wave 1 &bull; UX polish
                 </p>
             </div>
 
@@ -426,6 +426,117 @@
                 </div>
             </div>
 
+            <!-- 7/8 Map Editor Wave 1 — API + frontend -->
+            <div class="slide" data-section="WAVE1">
+                <div class="s-section">Wave 1 completion &mdash; 01/07</div>
+                <h2 class="s-title" style="font-size:34px">Map Editor: from scaffold to real app</h2>
+                <div class="split" style="flex:1;align-items:center;margin-top:12px">
+                    <div class="half" style="display:flex;flex-direction:column;gap:12px;justify-content:center">
+                        <div class="card card-blue" style="padding:16px 20px">
+                            <div style="display:flex;gap:14px;align-items:flex-start">
+                                <div style="width:44px;height:44px;border-radius:12px;background:rgba(10,132,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--blue30)">
+                                    <i class="fa-solid fa-cloud-arrow-up" style="font-size:20px;color:var(--blue)"></i>
+                                </div>
+                                <div>
+                                    <div class="card-title" style="font-size:15px;color:var(--blue)">Full CRUD API</div>
+                                    <div class="card-body" style="font-size:12px;margin-top:4px">
+                                        6 route blueprints: <strong>offices, rooms, desks, custom_fields, maps, upload</strong>. All authenticated via Bearer token. Background image upload/download for each office.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-amber" style="padding:16px 20px">
+                            <div style="display:flex;gap:14px;align-items:flex-start">
+                                <div style="width:44px;height:44px;border-radius:12px;background:rgba(245,158,11,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--amber30)">
+                                    <i class="fa-brands fa-react" style="font-size:20px;color:var(--amber)"></i>
+                                </div>
+                                <div>
+                                    <div class="card-title" style="font-size:15px;color:var(--amber)">Konva.js frontend</div>
+                                    <div class="card-body" style="font-size:12px;margin-top:4px">
+                                        Office selector with live data from API, <strong>CanvasEditor</strong> component, background image upload/remove UI. React + TypeScript + Vite build chain.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="half diagram">
+                        <svg viewBox="0 0 460 280">
+                            <rect x="40" y="10" width="380" height="34" rx="8" fill="var(--bg2)" stroke="var(--blue)" stroke-width="1.5" />
+                            <text x="230" y="30" fill="var(--blue)" font-size="11" font-family="Source Sans 3" font-weight="800" text-anchor="middle" dominant-baseline="central">Architecture now</text>
+
+                            <rect x="55" y="60" width="160" height="40" rx="6" fill="var(--bg2)" stroke="var(--amber)" stroke-width="1" />
+                            <text x="135" y="80" fill="var(--amber)" font-size="9" font-family="Source Sans 3" font-weight="600" text-anchor="middle" dominant-baseline="central">Vite + React + TS</text>
+                            <text x="135" y="94" fill="var(--text3)" font-size="7" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">Konva.js canvas</text>
+
+                            <text x="230" y="80" fill="var(--text2)" font-size="20" font-family="Source Sans 3" text-anchor="middle">&rarr;</text>
+
+                            <rect x="250" y="60" width="160" height="40" rx="6" fill="var(--bg2)" stroke="var(--blue)" stroke-width="1" />
+                            <text x="330" y="80" fill="var(--blue)" font-size="9" font-family="Source Sans 3" font-weight="600" text-anchor="middle" dominant-baseline="central">Flask API</text>
+                            <text x="330" y="94" fill="var(--text3)" font-size="7" font-family="Source Sans 3" text-anchor="middle" dominant-baseline="central">6 blueprints</text>
+
+                            <text x="405" y="80" fill="var(--text2)" font-size="20" font-family="Source Sans 3" text-anchor="middle">&rarr;</text>
+
+                            <rect x="55" y="120" width="360" height="34" rx="6" fill="var(--bg2)" stroke="var(--green)" stroke-width="1" />
+                            <text x="235" y="140" fill="var(--green)" font-size="9" font-family="Source Sans 3" font-weight="600" text-anchor="middle" dominant-baseline="central">In-memory SQLite test DB (fixtures: office, room, desk)</text>
+
+                            <rect x="40" y="190" width="380" height="24" rx="20" fill="rgba(10,132,255,0.08)" stroke="var(--blue15)" stroke-width="1" />
+                            <text x="230" y="206" fill="var(--text2)" font-size="9" font-family="Source Sans 3" font-weight="600" text-anchor="middle" dominant-baseline="central">&asymp;590 lines changed across 11 files (uncommitted)</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8/8 Bot polish -->
+            <div class="slide" data-section="POLISH">
+                <div class="s-section">Bot polish &mdash; 01/07</div>
+                <h2 class="s-title" style="font-size:34px">UX refinements across the bot</h2>
+                <div class="split" style="flex:1;align-items:center;margin-top:12px">
+                    <div class="half" style="display:flex;flex-direction:column;gap:14px;justify-content:center">
+                        <div class="card card-green" style="padding:16px 20px">
+                            <div style="display:flex;gap:14px;align-items:flex-start">
+                                <div style="width:44px;height:44px;border-radius:12px;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--green30)">
+                                    <i class="fa-solid fa-keyboard" style="font-size:20px;color:var(--green)"></i>
+                                </div>
+                                <div>
+                                    <div class="card-title" style="font-size:15px;color:var(--green)">Free-text business hours</div>
+                                    <div class="card-body" style="font-size:12px;margin-top:4px">
+                                        Replaced the 3-option dropdowns for start/end hours with <strong>free text input</strong> + regex validation. Users can now type any HH:MM — no more "my office opens at 07:00 but the dropdown starts at 08:00".
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-red" style="padding:16px 20px">
+                            <div style="display:flex;gap:14px;align-items:flex-start">
+                                <div style="width:44px;height:44px;border-radius:12px;background:rgba(239,68,68,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--red30)">
+                                    <i class="fa-solid fa-trash-can" style="font-size:20px;color:var(--red)"></i>
+                                </div>
+                                <div>
+                                    <div class="card-title" style="font-size:15px;color:var(--red)">Archive renamed to Delete</div>
+                                    <div class="card-body" style="font-size:12px;margin-top:4px">
+                                        Renamed the entire <code style="font-family:JetBrains Mono;font-size:11px;background:var(--bg3);padding:1px 3px">/archive-office</code> command to <code style="font-family:JetBrains Mono;font-size:11px;background:var(--bg3);padding:1px 3px">/delete-office</code> — slash command, modal title, button text, backend callbacks, UI labels, all test classes. The old "Archive" label was misleading (it actually soft-deleted).
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="half" style="display:flex;flex-direction:column;gap:14px;justify-content:center">
+                        <div class="card card-blue" style="padding:16px 20px">
+                            <div style="display:flex;gap:14px;align-items:flex-start">
+                                <div style="width:44px;height:44px;border-radius:12px;background:rgba(10,132,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--blue30)">
+                                    <i class="fa-solid fa-flask" style="font-size:20px;color:var(--blue)"></i>
+                                </div>
+                                <div>
+                                    <div class="card-title" style="font-size:15px;color:var(--blue)">Test infrastructure for web-editor</div>
+                                    <div class="card-body" style="font-size:12px;margin-top:4px">
+                                        Full in-memory SQLite database fixture with schema creation, seeded data fixtures (office, room, desk with map positions), and monkeypatched <code style="font-family:JetBrains Mono;font-size:11px;background:var(--bg3);padding:1px 3px">get_db()</code>. Every test gets a clean DB automatically.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div id="progress"></div>
@@ -434,7 +545,7 @@
             <span style="width:1px;height:16px;background:rgba(255,255,255,0.1);display:block"></span>
             <span id="section-label">PROGRESS</span>
             <button id="btn-prev" title="Previous"><i class="fa-solid fa-chevron-left"></i></button>
-            <span id="slide-counter">1 / 6</span>
+            <span id="slide-counter">1 / 8</span>
             <button id="btn-next" title="Next"><i class="fa-solid fa-chevron-right"></i></button>
             <button id="download-btn" title="Download"><i class="fa-solid fa-download"></i></button>
             <button id="fullscreen-btn" title="Fullscreen"><i class="fa-solid fa-expand"></i></button>
